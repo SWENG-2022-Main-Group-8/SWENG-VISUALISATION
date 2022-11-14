@@ -9,14 +9,15 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@main
-    - name: Set up Python
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.9.x'
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Test Code
-      run: python server/app.py
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install requirements
+        run: |
+          python -m pip install --upgrade pip
+      - name: Run tests
+        run: coverage run src/app_test.py
+      - name: Tests report
+        run: coverage report
