@@ -1,3 +1,5 @@
+Latest version of main branch will be deployed to https://sweng-visualisation.herokuapp.com/
+
 Install virtualenv by:
 ```pip install virtualenv```
 
