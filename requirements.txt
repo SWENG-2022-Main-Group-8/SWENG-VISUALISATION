@@ -70,8 +70,6 @@ source==1.2.0
 streamlit==1.12.2
 tb-nightly==2.10.0a20220811
 termcolor==2.0.1
-tf-estimator-nightly==2.11.0.dev2022091708
-tf-nightly==2.11.0.dev20220812
 toml==0.10.2
 toolz==0.12.0
 tornado==6.2
