@@ -1,9 +1,11 @@
 from flask import Flask, request
 import backEnd
 import json
+from flask_cors import CORS
 
-app =  Flask(__name__)
 
+app = Flask(__name__)
+CORS(app)
 
 @app.route("/username", methods=["GET", "POST"])
 def user():
