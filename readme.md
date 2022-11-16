@@ -17,3 +17,6 @@ If anyone installs any new dependencies, run this command and commit the changes
 
 To install dependencies from requirements.txt file, :
 ```pip install -r requirements.txt```
+
+To run the server
+```python3 server/app.py```
