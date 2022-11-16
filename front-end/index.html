@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="keywords" content="HTML, CSS, JavaScript">
-        
+
         <link rel="stylesheet" href="styles.css">
         <title>Group 8 Visualizer</title>
     </head>
@@ -12,9 +12,10 @@
     <body>
         <div>Search for a user down below!</div>
         <div>
-            <input id="user" type="text" placeholder="Username..." />
+            <label for="data-input">Data to send:</label>
+            <input type="text" id="data-input" placeholder="Username...">
             <a href="results.html">
-                <button>Search</button>
+                <button onclick="sendData()">Search</button>
             </a>
         </div>
     </body>

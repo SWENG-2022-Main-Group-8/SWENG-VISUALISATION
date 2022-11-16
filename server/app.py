@@ -8,9 +8,11 @@ import json
 app = Flask(__name__)
 CORS(app)
 
+
 @app.route('/')
 def index():
     return "Hello world!"
+
 
 @app.route('/username', methods=["GET", "POST"])
 def users():
@@ -26,6 +28,6 @@ def users():
         data = usernameAPI.re_to_json(username)
         return flask.Response(response=json.dumps(data), status=201)
 
+
 if __name__ == "__main__":
     app.run(debug=True)
-
