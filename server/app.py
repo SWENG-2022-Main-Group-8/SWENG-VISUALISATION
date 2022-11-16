@@ -1,5 +1,5 @@
 from flask import Flask, request
-import backEnd as bk
+import library.username as usernameAPI
 from flask_cors import CORS
 import json
 
@@ -25,7 +25,7 @@ def users():
         received_data = request.get_json()
         print(f"received data: {received_data}")
         username = received_data['data']
-        data = bk.re_to_json(username)
+        data = usernameAPI.re_to_json(username)
         return Flask.Response(response=json.dumps(data), status=201)
 
 if __name__ == "__main__":
