@@ -1,5 +1,5 @@
 from flask import Flask
-import back-end.backEnd as bk
+import backEnd as bk
 
 app =  Flask(__name__)
 
