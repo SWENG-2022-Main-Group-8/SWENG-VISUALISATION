@@ -1,5 +1,5 @@
 from flask import Flask, request
-import library.username as usernameAPI
+from library import username as usernameAPI
 from flask_cors import CORS
 import json
 
