@@ -20,30 +20,28 @@
                     <a href="index.html">
                         Home
                     </a>
+                    <!-- tmp search bar until i figure out how to make the home page search bar work -->
+                    <div class="searchbar">
+                        <label for="data-input">Input username here:</label>
+                        <input type="text" id="data-input" placeholder="Username...">
+                        <button onclick="sendData()">Search</button>
+                    </div>
                 </div>
-            </div>
-    
-            <div>
-                <label for="data-input">Input username below:</label>
-                <input type="text" id="data-input" placeholder="Username...">
-                <button onclick="sendData()">Search</button>
             </div>
 
             <div class="row">
                 <div class="column">
-                    <div class="userInfoCol">
-                        <div class="mt-3 col-md-12">
-                            <div class="well">
-                                <img class="mb-4 img-fluid" id="img" src=''>
+                    <div class="mt-3 col-md-12">
+                        <div class="well">
+                            <img class="mb-4 img-fluid" id="img" src=''>
 
-                                <p id="user"></p>
-                                <p id="name"></p>
-                                <p id="company"></p>
-                                <p id="location"></p>
-                                <p id="followers"></p>
-                                <p id="following"></p>
-                                <p id="public_repos"></p>
-                            </div>
+                            <p id="user"></p>
+                            <p id="name"></p>
+                            <p id="company"></p>
+                            <p id="location"></p>
+                            <p id="followers"></p>
+                            <p id="following"></p>
+                            <p id="public_repos"></p>
                         </div>
                     </div>
                 </div>

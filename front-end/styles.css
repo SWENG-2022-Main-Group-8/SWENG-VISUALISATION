@@ -1,5 +1,9 @@
-.column, .userInfoCol {
+.column {
     float: left;
     width: 50%;
+}
+
+.searchbar{
+    float: right;
 }
 
