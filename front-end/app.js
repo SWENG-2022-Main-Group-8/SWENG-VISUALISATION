@@ -51,13 +51,18 @@ var xhr = null;
         }
 
         function getUserInfo(userData) {
+
+            let name = document.getElementById('name');
+            name.innerHTML = `<b>Name: </b>${userData.name}`;
+
+    
             document.getElementById('user').innerHTML = userData.login;
             document.getElementById('location').innerHTML = userData.location;
             document.getElementById('company').innerHTML = userData.company;
             document.getElementById('followers').innerHTML = userData.followers;
             document.getElementById('following').innerHTML = userData.following;
             document.getElementById('public_repos').innerHTML = userData.public_repos;
-            document.getElementById('name').innerHTML = userData.name;
+            // document.getElementById('name').innerHTML = userData.name;
             let img = document.getElementById('img')
             img.src = userData.avatar_url;
         }
