@@ -52,17 +52,27 @@ var xhr = null;
 
         function getUserInfo(userData) {
 
+            let login = document.getElementById('user');
+            login.innerHTML = `<b>Username: </b>${userData.login}`;
+
+            let img = document.getElementById('img')
+            img.src = userData.avatar_url;
+            
             let name = document.getElementById('name');
             name.innerHTML = `<b>Name: </b>${userData.name}`;
 
-    
-            document.getElementById('user').innerHTML = userData.login;
-            document.getElementById('location').innerHTML = userData.location;
-            document.getElementById('company').innerHTML = userData.company;
-            document.getElementById('followers').innerHTML = userData.followers;
-            document.getElementById('following').innerHTML = userData.following;
-            document.getElementById('public_repos').innerHTML = userData.public_repos;
-            // document.getElementById('name').innerHTML = userData.name;
-            let img = document.getElementById('img')
-            img.src = userData.avatar_url;
+            let company = document.getElementById('company');
+            company.innerHTML = `<b>Company: </b>${userData.company == null ? 'User hasn\'t specified his company' : userData.company}`;
+            
+            let location = document.getElementById('location');
+            location.innerHTML = `<b>Location: </b>${userData.location == null ? 'User hasn\'t specified his location' : userData.location}`;
+
+            let followers = document.getElementById('followers');
+            followers.innerHTML = `<b>Followers: </b>${userData.followers}`;
+
+            let following = document.getElementById('following');
+            following.innerHTML = `<b>Following: </b>${userData.following}`;
+
+            let public_repos = document.getElementById('public_repos');
+            public_repos.innerHTML = `<b>Public Repos: </b>${userData.public_repos}`;
         }
