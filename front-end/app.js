@@ -12,15 +12,8 @@ var xhr = null;
             if (xhr.readyState == 4 && xhr.status == 201) {
                 console.log("Data creation response received!");
                 const userData = JSON.parse(xhr.responseText)
-                document.getElementById('user').innerHTML = userData.login;
-                document.getElementById('location').innerHTML = userData.location;
-                document.getElementById('company').innerHTML = userData.company;
-                document.getElementById('followers').innerHTML = userData.followers;
-                document.getElementById('following').innerHTML = userData.following;
-                document.getElementById('public_repos').innerHTML = userData.public_repos;
-                document.getElementById('name').innerHTML = userData.name;
-                let img = document.getElementById('img')
-                img.src = userData.avatar_url;
+
+                getUserInfo(userData);
             }
         }
         function dataCallback() {
@@ -55,4 +48,16 @@ var xhr = null;
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             // Send the request over the network
             xhr.send(JSON.stringify({ "data": dataToSend }));
+        }
+
+        function getUserInfo(userData) {
+            document.getElementById('user').innerHTML = userData.login;
+            document.getElementById('location').innerHTML = userData.location;
+            document.getElementById('company').innerHTML = userData.company;
+            document.getElementById('followers').innerHTML = userData.followers;
+            document.getElementById('following').innerHTML = userData.following;
+            document.getElementById('public_repos').innerHTML = userData.public_repos;
+            document.getElementById('name').innerHTML = userData.name;
+            let img = document.getElementById('img')
+            img.src = userData.avatar_url;
         }
