@@ -18,25 +18,25 @@ function sendDataCallback() {
     }
 }
 
-function dataCallback() {
-    // Check response is ready or not
-    if (xhr.readyState == 4 && xhr.status == 200) {
-        console.log("User data received!");
-        dataDiv = document.getElementById('result-container');
-        // Set current data text
-        dataDiv.innerHTML = xhr.responseText;
-    }
-}
+// function dataCallback() {
+//     // Check response is ready or not
+//     if (xhr.readyState == 4 && xhr.status == 200) {
+//         console.log("User data received!");
+//         dataDiv = document.getElementById('result-container');
+//         // Set current data text
+//         dataDiv.innerHTML = xhr.responseText;
+//     }
+// }
 
-function getUsers() {
-    console.log("Get users...");
-    xhr = getXmlHttpRequestObject();
-    xhr.onreadystatechange = dataCallback;
-    // asynchronous requests
-    xhr.open("GET", "http://127.0.0.1:5000/username", true);
-    // Send the request over the network
-    xhr.send(null);
-}
+// function getUsers() {
+//     console.log("Get users...");
+//     xhr = getXmlHttpRequestObject();
+//     xhr.onreadystatechange = dataCallback;
+//     // asynchronous requests
+//     xhr.open("GET", "http://127.0.0.1:5000/username", true);
+//     // Send the request over the network
+//     xhr.send(null);
+// }
 
 function sendData() {
     dataToSend = document.getElementById('data-input').value;
@@ -52,6 +52,9 @@ function sendData() {
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     // Send the request over the network
     xhr.send(JSON.stringify({ "data": dataToSend }));
+
+    if (chart1 != null) chart1.destroy();
+    main(dataToSend);
 }
 
 function getUserInfo(userData) {
@@ -80,3 +83,95 @@ function getUserInfo(userData) {
     let public_repos = document.getElementById('public_repos');
     public_repos.innerHTML = `<b>Public Repos: </b>${userData.public_repos}`;
 }
+
+async function getRequest(url) {
+    const response = await fetch(url);
+    let data = await response.json();
+    return data;
+}
+
+async function main(user) {
+    let url = `https://api.github.com/users/${user}/repos`;
+    let repo = await getRequest(url)
+    
+    getLanguages(repo, user);
+
+    console.log(repo)
+}
+
+async function getLanguages(repo, user) {
+    let label = [];
+    let data = [];
+    let backgroundColor = [];
+
+    for (i in repo) {
+        let url = `https://api.github.com/repos/${user}/${repo[i].name}/languages`;
+        let allLanguages = await getRequest(url)
+
+        for (language in allLanguages) {
+
+            if (label.includes(language)) {
+                for (i = 0; i < label.length; i++)
+                    if (language == label[i])
+                        data[i] = data[i] + allLanguages[language];
+
+            } else {
+                label.push(language);
+                data.push(allLanguages[language]);
+                backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.5)`);
+            }
+        }
+
+    }
+
+    draw1('language', 'pie', 'languages', `User's languages (in bytes)`, label, data, backgroundColor);
+}
+
+function draw1(ctx, type, datasetLabel, titleText, label, data, backgroundColor) {
+
+    let myChart = document.getElementById(ctx).getContext('2d');
+
+    chart1 = new Chart(myChart, {
+        type: type,
+        data: {
+            labels: label,
+            datasets: [{
+                label: datasetLabel,
+                data: data,
+                backgroundColor: backgroundColor,
+                borderWidth: 1,
+                borderColor: '#777',
+                hoverBorderWidth: 2,
+                hoverBorderColor: '#000'
+            }],
+
+        },
+        options: {
+            title: {
+                display: true,
+                text: titleText,
+                fontSize: 20
+            },
+            legend: {
+                display: true,
+                position: 'bottom',
+                labels: {
+                    fontColor: '#000'
+                }
+            },
+            layout: {
+                padding: {
+                    left: 50,
+                    right: 0,
+                    bottom: 0,
+                    top: 0
+                }
+            },
+            tooltips: {
+                enabled: true
+            }
+        }
+    });
+}
+
+var chart1 = null;
