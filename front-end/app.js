@@ -15,28 +15,11 @@ function sendDataCallback() {
         const userData = JSON.parse(xhr.responseText)
 
         getUserInfo(userData);
+        
+        if (chart1 != null) chart1.destroy();
+        main(dataToSend);
     }
 }
-
-// function dataCallback() {
-//     // Check response is ready or not
-//     if (xhr.readyState == 4 && xhr.status == 200) {
-//         console.log("User data received!");
-//         dataDiv = document.getElementById('result-container');
-//         // Set current data text
-//         dataDiv.innerHTML = xhr.responseText;
-//     }
-// }
-
-// function getUsers() {
-//     console.log("Get users...");
-//     xhr = getXmlHttpRequestObject();
-//     xhr.onreadystatechange = dataCallback;
-//     // asynchronous requests
-//     xhr.open("GET", "http://127.0.0.1:5000/username", true);
-//     // Send the request over the network
-//     xhr.send(null);
-// }
 
 function sendData() {
     dataToSend = document.getElementById('data-input').value;
@@ -52,9 +35,21 @@ function sendData() {
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     // Send the request over the network
     xhr.send(JSON.stringify({ "data": dataToSend }));
+}
 
-    if (chart1 != null) chart1.destroy();
-    main(dataToSend);
+async function getRequest(url) {
+    const response = await fetch(url);
+    let data = await response.json();
+    return data;
+}
+
+async function main(user) {
+    let url = `https://api.github.com/users/${user}/repos`;
+    let repo = await getRequest(url)
+    
+    getLanguages(repo, user);
+
+    console.log(repo)
 }
 
 function getUserInfo(userData) {
@@ -82,21 +77,6 @@ function getUserInfo(userData) {
 
     let public_repos = document.getElementById('public_repos');
     public_repos.innerHTML = `<b>Public Repos: </b>${userData.public_repos}`;
-}
-
-async function getRequest(url) {
-    const response = await fetch(url);
-    let data = await response.json();
-    return data;
-}
-
-async function main(user) {
-    let url = `https://api.github.com/users/${user}/repos`;
-    let repo = await getRequest(url)
-    
-    getLanguages(repo, user);
-
-    console.log(repo)
 }
 
 async function getLanguages(repo, user) {
@@ -144,7 +124,6 @@ function draw1(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
                 hoverBorderWidth: 2,
                 hoverBorderColor: '#000'
             }],
-
         },
         options: {
             title: {
@@ -175,3 +154,18 @@ function draw1(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
 }
 
 var chart1 = null;
+
+const handleOnMouseMove = e => {
+    const {currentTarget: target} = e;
+
+    const rect = target.getBoundingClientRect(),
+        x = e.clientX - rect.left,
+        y = e.clientY - rect.top;
+
+    target.style.setProperty("--mouse-x", `${x}px`)
+    target.style.setProperty("--mouse-y", `${y}px`)
+}
+
+for(const card of document.querySelectorAll(".card")){
+    card.onmousemove = e => handleOnMouseMove(e);
+}
