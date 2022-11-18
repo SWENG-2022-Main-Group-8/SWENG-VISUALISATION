@@ -13,7 +13,6 @@ CORS(app)
 def index():
     return "Hello world!"
 
-
 @app.route('/username', methods=["GET", "POST"])
 def users():
     print("users endpoint reached...")
