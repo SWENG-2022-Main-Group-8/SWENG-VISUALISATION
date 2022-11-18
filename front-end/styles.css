@@ -1,3 +1,34 @@
+:root {
+    --bg-color: rgb(49, 4, 51);
+}
+
+.homepage{
+    align-items: center;
+    background-color: var(--bg-color);
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    margin: 0px;
+    overflow: hidden;
+    padding: 0px;
+}
+
+#cards{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    max-width: 916px;
+    width: calc(100% - 20px);
+}
+.card{
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    cursor: pointer;
+    height: 260px;
+    width: 451px;
+}
+
 .column {
     float: left;
     width: 50%;
