@@ -23,7 +23,7 @@
 }
 
 .card{
-    background-color: rgba(255, 255, 255, 0.02);
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     cursor: pointer;
     height: 260px;
@@ -31,9 +31,12 @@
     position: relative;
 }
 
-.card:hover::before,
-.card:hover > .card-border{
+.card:hover::before {
     opacity: 1;
+}
+
+#cards:hover > .card > .card-border{
+    opacity:1;
 }
 
 .card::before, .card > .card-border {
