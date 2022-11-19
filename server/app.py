@@ -17,7 +17,7 @@ def index():
 def users():
     print("users endpoint reached...")
     if request.method == "GET":
-        with open("server\OmaidQ.json", "r") as f:
+        with open("OmaidQ.json", "r") as f:
             data = json.load(f)
             return flask.jsonify(data)
     if request.method == "POST":
