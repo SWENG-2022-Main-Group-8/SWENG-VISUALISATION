@@ -2,6 +2,7 @@ from flask import Flask, request
 import flask
 from library import username as usernameAPI
 from library import languageData as languagesAPI
+from library import commitData as commitAPI
 from flask_cors import CORS
 import json
 
@@ -18,9 +19,10 @@ def users():
 
     if request.method == "GET":
         languages = languagesAPI.retrieveLanguages("OmaidQ")
+        commitHistory = commitAPI.commitsLastFourWeeks("OmaidQ", "30", "10", "2022")
         with open("OmaidQ.json", "r") as f:
             data = json.load(f)
-            merge = dict(data.items() | languages.items())
+            merge = dict(data.items() | languages.items() | commitHistory.items())
             return flask.jsonify(merge)
 
     if request.method == "POST":
