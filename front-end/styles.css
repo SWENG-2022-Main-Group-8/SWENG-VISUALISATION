@@ -73,11 +73,25 @@
 .card > .card-content {
     background-color: var(--card-color);
     border-radius: inherit;
-    margin: 1px;
+    inset: 1px;
     height: calc(100% - 2px);
     width: calc(100% - 2px);
     z-index: 2;
-    position: relative;
+    position: absolute;
+    text-align: center;
+}
+
+.cardTitle{
+    position: absolute;
+    width: 100%;
+    bottom:0;
+    color: white;
+}
+
+.fa{
+    color: white;
+    font-size: 500%;
+    padding-top: 50px;
 }
 
 .column {
