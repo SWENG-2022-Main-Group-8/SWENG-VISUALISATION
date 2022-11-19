@@ -40,7 +40,9 @@ def commitsLastFourWeeks(username, requiredDay, requiredMonth, requiredYear):
             for k,v in commitDict.items():
                 currentWeek = datetime.strptime(k, '%d/%m/%Y')
                 weekAfter = currentWeek.date() + timedelta(days=7)
-                if(currentWeek.date() <= currentDate.date() <= weekAfter) :
+                #if currentDate is the last day of the four weeks (the date we inputted), add it to the last week's value.
+                #also check if currentDate is between this week from the dictionary, if so add it to the week's value
+                if((currentDate.date() == dateRequired.date() and weekAfter == currentDate.date()) or currentWeek.date() <= currentDate.date() < weekAfter) :
                     v = v + 1
                     commitDict[k] = v
 

@@ -19,7 +19,7 @@ def users():
 
     if request.method == "GET":
         languages = languagesAPI.retrieveLanguages("OmaidQ")
-        commitHistory = commitAPI.commitsLastFourWeeks("OmaidQ", "30", "10", "2022")
+        commitHistory = commitAPI.commitsLastFourWeeks("ArshadMohammadTCD", "19", "11", "2022")
         with open("OmaidQ.json", "r") as f:
             data = json.load(f)
             merge = dict(data.items() | languages.items() | commitHistory.items())
