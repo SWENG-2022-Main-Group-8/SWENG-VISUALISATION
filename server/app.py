@@ -1,5 +1,4 @@
 from flask import Flask, request
-import backEnd as bk
 from flask_cors import CORS
 import json
 
