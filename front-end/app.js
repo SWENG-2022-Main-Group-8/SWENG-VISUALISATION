@@ -37,6 +37,13 @@ function sendData() {
     xhr.send(JSON.stringify({ "data": dataToSend }));
 }
 
+async function getReactContributorData(){
+    let url = "https://api.github.com/repos/facebook/react/contributors";
+    let reactContrib = await getRequest(url)
+
+    print(reactContrib)
+}
+
 async function getRequest(url) {
     const response = await fetch(url);
     let data = await response.json();
@@ -68,6 +75,23 @@ function getUserInfo(userData) {
     
     let location = document.getElementById('location');
     location.innerHTML = `<b>Location: </b>${userData.location == null ? 'Not specified' : userData.location}`;
+
+    address = userData.location;
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=[AIzaSyCaN_NjULWKTMBVQYhQMCHoUIcJvg3fQUk]`)                
+    .then((response) => {
+        return response.json();
+    }).then(jsonData => {
+        latitude = jsonData.results[0].geometry.location.lat; 
+        longitude = jsonData.results[0].geometry.location.lng;
+    }).catch(error => {
+        console.log(error);
+    })
+
+    latitudeDoc = document.getElementById('latitude');
+    latitudeDoc.innerHTML = `<b>Latitude: </b>${latitude == null ? 'Not specified' : latitude}`;
+
+    longitudeDoc = document.getElementById('longitude');
+    longitudeDoc.innerHTML = `<b>Longittude: </b>${longitude == null ? 'Not specified' : longitude}`;
 
     let followers = document.getElementById('followers');
     followers.innerHTML = `<b>Followers: </b>${userData.followers}`;

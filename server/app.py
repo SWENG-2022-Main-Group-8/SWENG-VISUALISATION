@@ -1,5 +1,6 @@
 
 from flask import Flask, request
+import requests
 import flask
 from library import username as usernameAPI
 from flask_cors import CORS
@@ -27,6 +28,19 @@ def users():
         data = usernameAPI.re_to_json(username)
         return flask.Response(response=json.dumps(data), status=201)
 
+@app.route('/react', methods=["GET"])
+def react():
+    try:
+        url = "https://api.github.com/repos/facebook/react/contributors?per_page=100"
+        response =  requests.get(url)
+        print(json.loads(response.text))
+        return json.loads(response.text)
+
+    except:
+        print("Error")
+        return '{}'
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+#maps api key - AIzaSyCaN_NjULWKTMBVQYhQMCHoUIcJvg3fQUk

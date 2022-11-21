@@ -10,6 +10,37 @@
         <link rel="stylesheet" href="styles.css">
     
         <title>Group 8 Visualizer</title>
+        <style>
+            #map {
+                height: 100%;
+            }
+            html, body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+
+        <script>
+            function initMap(){
+                return "map";
+                let location = document.getElementById('location');
+                address = location.innerText;
+                // fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=[AIzaSyCaN_NjULWKTMBVQYhQMCHoUIcJvg3fQUk]`)                
+                // .then((response) => {
+                //     return response.json();
+                // }).then(jsonData => {
+                //     console.log(jsonData.results[0].geometry.location); // {lat: 45.425152, lng: -75.6998028}
+                // }).catch(error => {
+                //     console.log(error);
+                // })
+                var mapOptions = {
+                    zoom : 8,
+                    center: new google.maps.LAtLng(53.3498, 6.2603)
+                };
+            var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+            }
+        </script>
     </head>
 
     <body>
@@ -37,6 +68,9 @@
                             <p id="name"></p>
                             <p id="company"></p>
                             <p id="location"></p>
+                            <p id="latitude"></p>
+                            <p id="longitude"></p>
+                            <div id="map"></div>
                             <p id="followers"></p>
                             <p id="following"></p>
                             <p id="public_repos"></p>
@@ -58,7 +92,10 @@
                 </div>
             </div>
         </div>
-    
+        
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaN_NjULWKTMBVQYhQMCHoUIcJvg3fQUk&callback=initMap">
+        </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
         <script src="https://d3js.org/d3.v5.min.js"></script>
         <script src="app.js" defer></script>
