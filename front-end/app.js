@@ -59,6 +59,7 @@ async function main(user) {
     console.log(repo)
 }
 
+
 function getUserInfo(userData) {
 
     let login = document.getElementById('user');
@@ -76,23 +77,6 @@ function getUserInfo(userData) {
     let location = document.getElementById('location');
     location.innerHTML = `<b>Location: </b>${userData.location == null ? 'Not specified' : userData.location}`;
 
-    address = userData.location;
-    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=[AIzaSyCaN_NjULWKTMBVQYhQMCHoUIcJvg3fQUk]`)                
-    .then((response) => {
-        return response.json();
-    }).then(jsonData => {
-        latitude = jsonData.results[0].geometry.location.lat; 
-        longitude = jsonData.results[0].geometry.location.lng;
-    }).catch(error => {
-        console.log(error);
-    })
-
-    latitudeDoc = document.getElementById('latitude');
-    latitudeDoc.innerHTML = `<b>Latitude: </b>${latitude == null ? 'Not specified' : latitude}`;
-
-    longitudeDoc = document.getElementById('longitude');
-    longitudeDoc.innerHTML = `<b>Longittude: </b>${longitude == null ? 'Not specified' : longitude}`;
-
     let followers = document.getElementById('followers');
     followers.innerHTML = `<b>Followers: </b>${userData.followers}`;
 
@@ -101,6 +85,24 @@ function getUserInfo(userData) {
 
     let public_repos = document.getElementById('public_repos');
     public_repos.innerHTML = `<b>Public Repos: </b>${userData.public_repos}`;
+
+    let bool1 = 'longitude' in userData;
+    let bool2 = 'latitude' in userData;
+    console.log(bool1, bool2);
+    if(bool1 && bool2){
+        console.log("map initialize");
+        // initialize map
+        map = L.map('mapDiv').setView([userData.latitude, userData.longitude], 13);
+        // set map tiles source
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+            maxZoom: 18,
+        }).addTo(map);
+        // add marker to the map
+        marker = L.marker([userData.latitude, userData.longitude]).addTo(map);
+    }
+
+    
 }
 
 async function getLanguages(repo, user) {

@@ -3,6 +3,7 @@ from flask import Flask, request
 import requests
 import flask
 from library import username as usernameAPI
+from library import individualMap as mapAPI
 from flask_cors import CORS
 import json
 
@@ -26,6 +27,10 @@ def users():
         print(f"received data: {received_data}")
         username = received_data['data']
         data = usernameAPI.re_to_json(username)
+        print("---------------------")
+        coords = mapAPI.getLatLng(data.get("location"))
+        data = mapAPI.mergeDictionary(data, coords)
+        print(data)
         return flask.Response(response=json.dumps(data), status=201)
 
 @app.route('/react', methods=["GET"])
