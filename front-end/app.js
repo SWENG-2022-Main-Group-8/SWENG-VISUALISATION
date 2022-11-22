@@ -79,4 +79,8 @@ function getUserInfo(userData) {
 
     let public_repos = document.getElementById('public_repos');
     public_repos.innerHTML = `<b>Public Repos: </b>${userData.public_repos}`;
+    
+    let language = document.getElementById('language');
+    console.log('user language is ',language);
+    language.innerHTML = `<b>Following: </b>${userData.language}`;
 }
