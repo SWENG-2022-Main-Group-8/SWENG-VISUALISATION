@@ -37,6 +37,13 @@ function sendData() {
     xhr.send(JSON.stringify({ "data": dataToSend }));
 }
 
+async function getReactContributorData(){
+    let url = "https://api.github.com/repos/facebook/react/contributors";
+    let reactContrib = await getRequest(url)
+
+    print(reactContrib)
+}
+
 async function getRequest(url) {
     const response = await fetch(url);
     let data = await response.json();
@@ -51,6 +58,7 @@ async function main(user) {
 
     console.log(repo)
 }
+
 
 function getUserInfo(userData) {
 
@@ -77,6 +85,24 @@ function getUserInfo(userData) {
 
     let public_repos = document.getElementById('public_repos');
     public_repos.innerHTML = `<b>Public Repos: </b>${userData.public_repos}`;
+
+    let bool1 = 'longitude' in userData;
+    let bool2 = 'latitude' in userData;
+    console.log(bool1, bool2);
+    if(bool1 && bool2){
+        console.log("map initialize");
+        // initialize map
+        map = L.map('mapDiv').setView([userData.latitude, userData.longitude], 13);
+        // set map tiles source
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+            maxZoom: 18,
+        }).addTo(map);
+        // add marker to the map
+        marker = L.marker([userData.latitude, userData.longitude]).addTo(map);
+    }
+
+    
 }
 
 async function getLanguages(repo, user) {
