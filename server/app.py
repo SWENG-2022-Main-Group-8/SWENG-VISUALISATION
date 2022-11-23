@@ -101,6 +101,10 @@ def handle_github_callback():
     else:
         return jsonify(error="404_no_code"), 404
 
+@app.route('/hellotest')
+def hello_test():
+    return 'Hello world!'
+
 @app.route('/username', methods=["GET", "POST"])
 def users():
     print("users endpoint reached...")
