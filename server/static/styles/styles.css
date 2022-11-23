@@ -1,7 +1,7 @@
-:root {
-    --bg-color: rgb(20, 20, 20);
-    --card-color: rgb(23, 23, 23);
-}
+/* body {
+    background-color: #1E1E1E;
+    color: #F0F0F0;
+} */
 
 .homepage{
     align-items: center;
@@ -14,6 +14,11 @@
     padding: 0px;
 }
 
+.event {
+    margin-bottom: 5px;
+    font-size: medium;
+}
+
 .loginpage{
     background-color: var(--bg-color);
     height: 100vh;
@@ -22,7 +27,7 @@
     padding: 0px;
 }
 
-#cards{
+#homeCards{
     display:flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -30,7 +35,7 @@
     width: calc(100% - 20px);
 }
 
-.card{
+.homeCard{
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     cursor: pointer;
@@ -39,15 +44,15 @@
     position: relative;
 }
 
-.card:hover::before {
+.homeCard:hover::before {
     opacity: 1;
 }
 
-#cards:hover > .card > .card-border{
+#homeCards:hover > .homeCard > .homeCard-border{
     opacity:1;
 }
 
-.card::before, .card > .card-border {
+.homeCard::before, .homeCard > .homeCard-border {
     opacity: 0;
     transition: opacity 500ms;
     border-radius: inherit;
@@ -60,7 +65,7 @@
     z-index: 2;
 }
 
-.card::before{
+.homeCard::before{
     background: radial-gradient(
         800px circle at var(--mouse-x) var(--mouse-y),
         rgba(255, 255, 255, 0.06),
@@ -69,7 +74,7 @@
     z-index: 3;
 }
 
-.card > .card-border {
+.homeCard > .homeCard-border {
     background: radial-gradient(
         800px circle at var(--mouse-x) var(--mouse-y),
         rgba(255, 255, 255, 0.3),
@@ -78,8 +83,8 @@
     z-index: 1;
 }
 
-.card > .card-content {
-    background-color: var(--card-color);
+.homeCard > .homeCard-content {
+    background-color: var(--homeCard-color);
     border-radius: inherit;
     inset: 1px;
     height: calc(100% - 2px);
@@ -89,7 +94,7 @@
     text-align: center;
 }
 
-.cardTitle{
+.homeCardTitle{
     position: absolute;
     width: 100%;
     bottom:0;

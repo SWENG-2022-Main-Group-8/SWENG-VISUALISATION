@@ -64,15 +64,44 @@ function languagesChart(language_info) {
     let backgroundColor = [];
 
     for (let language in language_info) {
-        console.log(language)
-        console.log(language_info[language])
         label.push(language);
         data.push(language_info[language]);
-        backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.5)`);
+        backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
     
     }
 
-    draw1('language', 'pie', 'languages', `User's languages (in bytes)`, label, data, backgroundColor);
+    draw1('language', 'pie', 'languages', `User's languages`, label, data, backgroundColor);
+}
+
+function fillCommitChart(commitData) {
+    const data = commitData['commits'];
+
+
+    repoChart = new Chart(
+        document.getElementById('repo_commits'),
+        {
+          type: 'bar',
+          data: {
+            labels: [...Array(52).keys()].map(i => i+1),
+            datasets: [
+              {
+                label: 'Commits by week',
+                data: data,
+                backgroundColor: generateColours(data)
+              }
+            ]
+          }
+        }
+      );
+    
+}
+
+function generateColours(list) {
+    let coloursList = []
+    for (item in list) {
+        coloursList.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.8)`);
+    }
+    return coloursList;
 }
 
 
@@ -123,14 +152,3 @@ function draw1(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
 }
 
 var chart1 = null;
-
-document.getElementById("cards").onmousemove = e => {
-    for(const card of document.getElementsByClassName("card")){
-        const rect = card.getBoundingClientRect(),
-            x = e.clientX - rect.left,
-            y = e.clientY - rect.top;
-
-        card.style.setProperty("--mouse-x", `${x}px`)
-        card.style.setProperty("--mouse-y", `${y}px`)
-    }
-}
