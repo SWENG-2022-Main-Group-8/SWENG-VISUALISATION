@@ -14,6 +14,14 @@
     padding: 0px;
 }
 
+.loginpage{
+    background-color: var(--bg-color);
+    height: 100vh;
+    margin: 0px;
+    overflow: hidden;
+    padding: 0px;
+}
+
 #cards{
     display:flex;
     flex-wrap: wrap;
@@ -103,3 +111,6 @@
     float: right;
 }
 
+.gradient-bg {
+    background-image: linear-gradient(to right top, #3a2450, #44255f, #4e266f, #5a267e, #66248d, #67208e, #671c8f, #681790, #5c1184, #500a77, #45046b, #3a005f);
+}
