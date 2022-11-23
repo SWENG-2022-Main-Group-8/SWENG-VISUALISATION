@@ -1,6 +1,8 @@
 from flask import Flask, request
+import requests
 import flask
 from library import username as usernameAPI
+from library import individualMap as mapAPI
 from library import languageData as languagesAPI
 from library import commitData as commitAPI
 from flask_cors import CORS
@@ -31,8 +33,25 @@ def users():
         username = received_data['data']
         userInfo = usernameAPI.userInfo(username)
         languages = languagesAPI.retrieveLanguages(username)
+        print("---------------------")
+        coords = mapAPI.getLatLng(data.get("location"))
+        data = mapAPI.mergeDictionary(data, coords)
+        print(data)
         mergeOfDataAndLanguages = dict(userInfo.items() | languages.items())
         return flask.Response(response=json.dumps(mergeOfDataAndLanguages), status=201)
+@app.route('/react', methods=["GET"])
+def react():
+    try:
+        url = "https://api.github.com/repos/facebook/react/contributors?per_page=100"
+        response =  requests.get(url)
+        print(json.loads(response.text))
+        return json.loads(response.text)
+
+    except:
+        print("Error")
+        return '{}'
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+#maps api key - AIzaSyCaN_NjULWKTMBVQYhQMCHoUIcJvg3fQUk
