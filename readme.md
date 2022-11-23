@@ -18,5 +18,13 @@ If anyone installs any new dependencies, run this command and commit the changes
 To install dependencies from requirements.txt file, :
 ```pip install -r requirements.txt```
 
+To run the server do one of the following
+```run server/app.py```
+
+For some this tells you flask module not found, instead try one of the two:
+```python -m flask run```
+```python3 -m flask run```
+
 To run the server
 ```python3 server/app.py```
+
