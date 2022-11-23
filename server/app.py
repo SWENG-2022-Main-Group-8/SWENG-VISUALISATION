@@ -1,15 +1,15 @@
-
 from flask import Flask, request
 import requests
 import flask
 from library import username as usernameAPI
 from library import individualMap as mapAPI
+from library import languageData as languagesAPI
+from library import commitData as commitAPI
 from flask_cors import CORS
 import json
 
 app = Flask(__name__)
 CORS(app)
-
 
 @app.route('/')
 def index():
@@ -18,21 +18,27 @@ def index():
 @app.route('/username', methods=["GET", "POST"])
 def users():
     print("users endpoint reached...")
+
     if request.method == "GET":
+        languages = languagesAPI.retrieveLanguages("OmaidQ")
+        commitHistory = commitAPI.commitsLastFourWeeks("ArshadMohammadTCD", "19", "11", "2022")
         with open("OmaidQ.json", "r") as f:
             data = json.load(f)
-            return flask.jsonify(data)
+            merge = dict(data.items() | languages.items() | commitHistory.items())
+            return flask.jsonify(merge)
+
     if request.method == "POST":
         received_data = request.get_json()
         print(f"received data: {received_data}")
         username = received_data['data']
-        data = usernameAPI.re_to_json(username)
+        userInfo = usernameAPI.userInfo(username)
+        languages = languagesAPI.retrieveLanguages(username)
         print("---------------------")
         coords = mapAPI.getLatLng(data.get("location"))
         data = mapAPI.mergeDictionary(data, coords)
         print(data)
-        return flask.Response(response=json.dumps(data), status=201)
-
+        mergeOfDataAndLanguages = dict(userInfo.items() | languages.items())
+        return flask.Response(response=json.dumps(mergeOfDataAndLanguages), status=201)
 @app.route('/react', methods=["GET"])
 def react():
     try:
