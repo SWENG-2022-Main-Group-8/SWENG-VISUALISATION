@@ -12,7 +12,7 @@
         <title>Group 8 Visualizer</title>
     </head>
 
-    <body class="container-fluid p-0 bg-light">
+    <body class="container-fluid p-0 bg-light" onload="fill_data()">
         <nav class="navbar navbar-expand-lg bg-light justify-content-center gradient-bg">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
@@ -22,9 +22,9 @@
                     <a class="nav-link text-light" href="#">Map</a>
                 </li>
                 </ul>
-                <form class="d-flex" role="search">
-                <input class="form-control ms-2" type="search" placeholder="Search for another user" aria-label="Search">
-                <button class="btn btn-secondary ms-2" type="submit">Search</button>
+                <form action="/results" method="get" class="d-flex" role="search">
+                    <input class="form-control ms-2" type="search" name="username" placeholder="Search for another user" aria-label="Search">
+                    <button class="btn btn-secondary ms-2" type="submit">Search</button>
                 </form>
         </nav>
         
@@ -33,14 +33,14 @@
                 <div class="column">
                     <div class="mt-3 col-md-12">
                         <div class="well">
-                            <img class="mb-4 img-fluid" id="img" src='{{ info.avatar_url }}'>
-                            <p id="user"><b>Username: </b>{{ info.login }}</p>
-                            <p id="name"><b>Name: </b> {{ info.name }}</p>
-                            <p id="company"><b>Company: </b> {{ info.company }}</p>
-                            <p id="location"><b>Location: </b> {{ info.location }} </p>
-                            <p id="followers"><b>Followers: </b> {{ info.followers }} </p>
-                            <p id="following"><b>Following: </b> {{ info.following }} </p>
-                            <p id="public_repos"><b>Public Repos: </b> {{ info.public_repos }} </p>
+                            <img class="mb-4 img-fluid" id="img" src="{{ userData.avatar_url }}">
+                            <p id="user"><b>Username: </b>{{ userData.login }}</p>
+                            <p id="name"><b>Name: </b> {{ userData.name }}</p>
+                            <p id="company"><b>Company: </b> {{ userData.company }}</p>
+                            <p id="location"><b>Location: </b> {{ userData.location }} </p>
+                            <p id="followers"><b>Followers: </b> {{ userData.followers }} </p>
+                            <p id="following"><b>Following: </b> {{ userData.following }} </p>
+                            <p id="public_repos"><b>Public Repos: </b> {{ userData.public_repos }} </p>
                             <div id="mapDiv" style="width: 400px; height: 300px"></div>
                         </div>
                     </div>
@@ -52,6 +52,7 @@
                         </div>
                     </div>
                 </div>
+                <div class="column"><p>{{ language_dict }}</p></div>
             </div>
 
             <div class="row">
@@ -63,7 +64,17 @@
         
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
         <script src="https://d3js.org/d3.v5.min.js"></script>
-        <script src="{{ url_for('static',filename='app.js') }}"></script>
+        <script src="{{ url_for('static',filename='app2.js') }}"></script>
+        <script>
+            function fill_data() {
+                const mapData = {{map_data|tojson|safe}};
+                console.log(mapData)
+                const languageData = {{language_dict|tojson|safe}};
+                console.log(languageData)
+                fillMapData(mapData)
+                languagesChart(languageData)
+            }
+        </script>
     </body>
 
 </html>

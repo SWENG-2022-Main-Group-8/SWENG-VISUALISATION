@@ -21,19 +21,46 @@ client_secret = app.config.get("CLIENT_SECRET")
 def index():
     return render_template("index.html")
 
-@app.route('/results')
+@app.route('/results', methods=["GET"])
 def results_page():
-    if 'access_token' not in current_session:
-        return 'Never trust strangers', 404
-    # Get user information from github api
-    access_token_url = 'https://api.github.com/user'
-    r = requests.get(access_token_url, auth=('access_token', current_session['access_token']))
-    try:
-        resp = r.json()
-        return render_template("results2.html", info=resp)
-    except AttributeError:
-        app.logger.debug('error getting username from github, whoops')
-        return "I don't know who you are; I should, but regretfully I don't", 500
+    if request.method == 'GET':
+        repos_url = 'https://api.github.com/user/repos';
+        access_token_url = 'https://api.github.com/user'
+        #User is searching for another user
+        if 'username' in request.args:
+            username = request.args['username']
+            access_token_url = f'https://api.github.com/users/{username}'
+            repos_url = f'https://api.github.com/users/{username}/repos'
+        #User is not logged in
+        elif 'access_token' not in current_session:
+            return redirect('/login')
+
+        #User is logged in
+        # Get logged in user information from github api
+        userData = requests.get(access_token_url, auth=('access_token', current_session['access_token']))
+        userData = userData.json()
+
+        #Get logged in user repos
+        user_repos = requests.get(repos_url, auth=('access_token', current_session['access_token']))
+        user_repos = user_repos.json()
+        language_dict = {}
+        for repo in user_repos:
+            if repo['language']:
+                if repo['language'] not in language_dict:
+                    language_dict[repo['language']] = 1
+                else:
+                    language_dict[repo['language']] = language_dict[repo['language']] + 1
+
+        #Get user location coords
+        map_data = mapAPI.getLatLng(userData['location'])
+        print(map_data)
+
+        try:
+            return render_template("results2.html", userData=userData, user_repos=user_repos, language_dict=language_dict, map_data=map_data)
+        except AttributeError:
+            app.logger.debug('error getting username from github, whoops')
+            return "I don't know who you are; I should, but regretfully I don't", 500
+
 
 @app.route('/map')
 def map_page():
