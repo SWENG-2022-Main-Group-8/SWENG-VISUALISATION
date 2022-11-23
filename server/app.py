@@ -1,4 +1,3 @@
-
 from flask import Flask, request, redirect, render_template, jsonify
 from flask import session as current_session
 import requests
@@ -68,6 +67,7 @@ def results_page():
 def map_page():
     return render_template("map.html")
 
+
 @app.route('/login')
 def login_page():
     return render_template('login.html')
@@ -116,7 +116,7 @@ def users():
             data = json.load(f)
             merge = dict(data.items() | languages.items() | commitHistory.items())
             return flask.jsonify(merge)
-
+            
     if request.method == "POST":
         received_data = request.get_json()
         print(f"received data: {received_data}")
@@ -129,6 +129,7 @@ def users():
         print(data)
         mergeOfDataAndLanguages = dict(userInfo.items() | languages.items())
         return flask.Response(response=json.dumps(mergeOfDataAndLanguages), status=201)
+        
 @app.route('/react', methods=["GET"])
 def react():
     try:
@@ -140,6 +141,8 @@ def react():
     except:
         print("Error")
         return '{}'
+        data = bk.re_to_json(username)
+        return Flask.Response(response=json.dumps(data), status=201)
 
 if __name__ == "__main__":
     app.secret_key = "super_duper_secret_key"

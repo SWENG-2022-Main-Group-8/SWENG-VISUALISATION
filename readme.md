@@ -25,6 +25,6 @@ For some this tells you flask module not found, instead try one of the two:
 ```python -m flask run```
 ```python3 -m flask run```
 
-
-
+To run the server
+```python3 server/app.py```
 
