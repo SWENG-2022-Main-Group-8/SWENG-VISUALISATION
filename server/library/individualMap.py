@@ -5,7 +5,7 @@ def getLatLng(address):
     try:
         geolocator = Nominatim(user_agent="MyApp")
         location = geolocator.geocode(address)
-        coordinates = {"latitude":location.latitude, "longitude":location.longitude}
+        coordinates = {'latitude':location.latitude, 'longitude':location.longitude}
         return coordinates
     except:
         print("Invalid Address")
