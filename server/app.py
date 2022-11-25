@@ -178,8 +178,7 @@ def organisationMaps():
 
         mapOrg = received_data['data']
         mapOrgData = orgMapAPI.getOrgLocationData(mapOrg)
-           
-        return flask.Response(response=json.dumps(), status=201)
+        return flask.Response(response=json.dumps(mapOrgData), status=201)
         
 
 
