@@ -2,6 +2,8 @@ import requests
 import json
 from itertools import takewhile
 
+none = "None"
+
 def getOrgLocationData(organisation):
     countryDict = {}
     #   Do until api fails
@@ -25,7 +27,7 @@ def getOrgLocationData(organisation):
             continue
         userData = response.json()
         location =userData["location"]
-        if location != "None":
+        if location is not None:
             response = requests.get("https://nominatim.openstreetmap.org/search?q={}&format=json&addressdetails=1&limit=1".format(location))
             responseJsonFile = response.json()
             print("")
@@ -37,21 +39,20 @@ def getOrgLocationData(organisation):
                 countryDict[countryCode] = countryDict[countryCode]+1
             except KeyError:
                 countryDict[countryCode] = 1
-# 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
-                
+        else:
+            countryCode = "int"
+
+            try:                    
+                countryDict[countryCode] = countryDict[countryCode]+1
+            except KeyError:
+                countryDict[countryCode] = 1
+
     print(countryDict)
     return countryDict
     
+# For testing purposes only!
+getOrgLocationData("FT-Autonomous")
 
-        
-getOrgLocationData("camunda")
-
-
-# geolocator = Nominatim(user_agent="Git Repo Mapper")
-# location = geolocator.geocode("Trinity College Dublin, Dublin")
-# print(location.address)
-# googleGeolocator = GoogleV3(user_agent= "Git Repo Mapper")
-# location = googleGeolocator.geocode("Trinity College Dublin")
 
 
 
