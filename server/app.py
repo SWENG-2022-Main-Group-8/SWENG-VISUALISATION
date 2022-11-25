@@ -180,10 +180,6 @@ def organisationMaps():
         mapOrgData = orgMapAPI.getOrgLocationData(mapOrg)
         return flask.Response(response=json.dumps(mapOrgData), status=201)
         
-
-
-
-
 if __name__ == "__main__":
     app.secret_key = "super_duper_secret_key"
     app.run(debug=True)
