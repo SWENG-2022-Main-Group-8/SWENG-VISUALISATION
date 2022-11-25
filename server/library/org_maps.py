@@ -40,7 +40,7 @@ def getOrgLocationData(organisation):
 # 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
                 
     print(countryDict)
-    return json.dumps(countryDict, indent = 4)
+    return countryDict
     
 
         

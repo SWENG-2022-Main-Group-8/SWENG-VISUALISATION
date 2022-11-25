@@ -6,6 +6,7 @@ from library import username as usernameAPI
 from library import individualMap as mapAPI
 from library import languageData as languagesAPI
 from library import commitData as commitAPI
+from library import org_maps as orgMapAPI
 from flask_cors import CORS
 import json
 import os
@@ -167,6 +168,22 @@ def react():
         return '{}'
         data = bk.re_to_json(username)
         return Flask.Response(response=json.dumps(data), status=201)
+
+@app.route('/organisation-map', methods=['POST'])
+def organisationMaps():
+     if request.method == "POST":
+        received_data = request.get_json()
+      
+        print(f"received data: {received_data}")
+
+        mapOrg = received_data['data']
+        mapOrgData = orgMapAPI.getOrgLocationData(mapOrg)
+           
+        return flask.Response(response=json.dumps(), status=201)
+        
+
+
+
 
 if __name__ == "__main__":
     app.secret_key = "super_duper_secret_key"
