@@ -51,7 +51,7 @@ def getOrgLocationData(organisation):
     return countryDict
     
 # For testing purposes only!
-getOrgLocationData("FT-Autonomous")
+# getOrgLocationData("FT-Autonomous")
 
 
 
