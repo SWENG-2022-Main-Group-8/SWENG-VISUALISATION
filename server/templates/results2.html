@@ -12,7 +12,7 @@
         <title>Group 8 Visualizer</title>
     </head>
 
-    <body class="container-fluid p-0 bg-light" onload="fill_data()">
+    <body class="container-fluid p-0" onload="fill_data()">
         <nav class="navbar navbar-expand-lg bg-light justify-content-center gradient-bg">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
@@ -28,35 +28,81 @@
                 </form>
         </nav>
         
-        <div class="container-fluid">
-            <div class="row">
-                <div class="column">
-                    <div class="mt-3 col-md-12">
-                        <div class="well">
-                            <img class="mb-4 img-fluid" id="img" src="{{ userData.avatar_url }}">
-                            <p id="user"><b>Username: </b>{{ userData.login }}</p>
-                            <p id="name"><b>Name: </b> {{ userData.name }}</p>
-                            <p id="company"><b>Company: </b> {{ userData.company }}</p>
-                            <p id="location"><b>Location: </b> {{ userData.location }} </p>
-                            <p id="followers"><b>Followers: </b> {{ userData.followers }} </p>
-                            <p id="following"><b>Following: </b> {{ userData.following }} </p>
-                            <p id="public_repos"><b>Public Repos: </b> {{ userData.public_repos }} </p>
-                            <div id="mapDiv" style="width: 400px; height: 300px"></div>
+        <div class="container-fluid mt-5">
+            <div class="row justify-content-center">
+                <div class="col-xl-3">
+                    <div class="card">
+                        <img class="mb-4 img-fluid" class="card-img-top" id="img" src="{{ userData.avatar_url }}">
+                        <div class="card-body">
+                            <h5 id="user" class="card-title">{{ userData.login }}</h5>
+                            <p id="name" class="card-text">{{ userData.name }}</p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li id="company" class="list-group-item"><b>Company: </b> {{ userData.company }}</li>
+                            <li id="location" class="list-group-item"><b>Location: </b> {{ userData.location }} </li>
+                            <li id="followers" class="list-group-item"><b>Followers: </b> {{ userData.followers }} </li>
+                            <li id="following" class="list-group-item"><b>Following: </b> {{ userData.following }} </li>
+                            <li id="public_repos" class="list-group-item"><b>Public Repos: </b> {{ userData.public_repos }} </li>
+                        </ul>
+                        <div class="card-body">
+                            <div id="mapDiv" style="width: 250px; height: 250px"></div>
                         </div>
                     </div>
                 </div>
-                <div class="column">
+
+
+
+                <div class="col-xl-8">
+                    <div class="card text-center">
+                        <div class="card-header"> Most Recent Events </div>
+                        <div class="card-body">
+                            {% for i in range(8) %}
+                                <div class="event">
+                                <p><strong>{{user_events[i].actor.login|e}}</strong> completed a <strong>{{user_events[i].type|e}}</strong> in the repo: <strong>{{user_events[i].repo.name|e}}</strong></p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="card-footer text-muted">Last updated: 2 hours ago</div>
+                    </div>
                     <div class="mt-3 col-md-12">
                         <div class="well">
                             <canvas id="language"></canvas>
                         </div>
                     </div>
                 </div>
+            
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-xl-8">
+                    <h3>Your top repos this year</h3>
+                    <div class="repos-chart">
+                        <canvas id="repo_commits" ></canvas>
+                    </div>
+                    <select onchange="switchRepoChart()" id="repo_chart_selector" class="form-select" aria-label="Default select example">
+                        {% for i in range(8) %}
+                                {% if i == 0 %}
+                                    <option selected>{{repo_commits[1]['name']}}</option>
+                                {% endif %}
+                                <option value="{{repo_commits[i]['name']}}">{{repo_commits[i]['name']}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
 
-            <div class="row">
-                <div>
-                    <div id="sent-data-container"></div>
+            <div class="row justify-content-center" >
+                <div class="col-xl-10">
+                    <div id="sent-data-container">
+                        <h3>Commit history:</h3>
+                        {{commit_history_example}}
+
+                        <h4>Repos:</h4>
+                        {% for repo in user_repos %}
+                            <p>
+                                {{repo}}
+                            </p>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -65,13 +111,28 @@
         <script src="https://d3js.org/d3.v5.min.js"></script>
         <script src="{{ url_for('static',filename='app2.js') }}"></script>
         <script>
+            const repo_commits_local = {{repo_commits|tojson|safe}};
             function fill_data() {
                 const mapData = {{map_data|tojson|safe}};
                 console.log(mapData)
                 const languageData = {{language_dict|tojson|safe}};
-                console.log(languageData)
+                let first_repo_data = repo_commits_local[0]
+                console.log(repo_commits_local)
                 fillMapData(mapData)
                 languagesChart(languageData)
+                fillCommitChart(first_repo_data)
+            }
+
+            function switchRepoChart() {
+                let chosen_repo = document.getElementById('repo_chart_selector').value;
+                console.log(chosen_repo)
+                let chosen_data = repo_commits_local.find((repo, index) => {
+                    console.log(repo)
+                    if (repo.name == chosen_repo)
+                        return repo_commits_local[index];
+                });
+                console.log(chosen_data)
+                fillCommitChart(chosen_data)
             }
         </script>
     </body>

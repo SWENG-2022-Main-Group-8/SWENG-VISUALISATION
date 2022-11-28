@@ -6,6 +6,7 @@ from library import username as usernameAPI
 from library import individualMap as mapAPI
 from library import languageData as languagesAPI
 from library import commitData as commitAPI
+from library import org_maps as orgMapAPI
 from flask_cors import CORS
 import json
 import os
@@ -25,21 +26,26 @@ def index():
 @app.route('/results', methods=["GET"])
 def results_page():
     if request.method == 'GET':
-        repos_url = 'https://api.github.com/user/repos';
+        repos_url = 'https://api.github.com/user/repos'
         access_token_url = 'https://api.github.com/user'
+        events_url = ''
+
         #User is searching for another user
         if 'username' in request.args:
             username = request.args['username']
             access_token_url = f'https://api.github.com/users/{username}'
             repos_url = f'https://api.github.com/users/{username}/repos'
+            events_url = f'https://api.github.com/users/{username}/events'
+
         #User is not logged in
-        elif 'access_token' not in current_session:
+        if 'access_token' not in current_session:
             return redirect('/login')
 
         #User is logged in
         # Get logged in user information from github api
         userData = requests.get(access_token_url, auth=('access_token', current_session['access_token']))
         userData = userData.json()
+        username = userData['login']
 
         #Get logged in user repos
         user_repos = requests.get(repos_url, auth=('access_token', current_session['access_token']))
@@ -51,13 +57,32 @@ def results_page():
                     language_dict[repo['language']] = 1
                 else:
                     language_dict[repo['language']] = language_dict[repo['language']] + 1
+        
+        #Get user events
+        if 'username' not in request.args:
+            events_url = f'https://api.github.com/users/{username}/events'
+        user_events = requests.get(events_url, auth=('access_token', current_session['access_token']))
+        user_events = user_events.json()
 
         #Get user location coords
         map_data = mapAPI.getLatLng(userData['location'])
-        print(map_data)
+
+        #Get user repos commit history
+        repo_commits = []
+        for repo in user_repos:
+                repo_name = repo['name']
+                commit_history_url = f'https://api.github.com/repos/{username}/{repo_name}/stats/participation'
+                commit_history = requests.get(commit_history_url, auth=('access_token', current_session['access_token']))
+                commit_history = commit_history.json()
+                if 'message' not in commit_history:
+                    this_repos_commits = {'name': repo_name, 'commits': commit_history['owner']}
+                    repo_commits.append(this_repos_commits)
+        
+        repo_commits.sort(key=lambda x: sum(x['commits']), reverse=True)
+        print(repo_commits)
 
         try:
-            return render_template("results2.html", userData=userData, user_repos=user_repos, language_dict=language_dict, map_data=map_data)
+            return render_template("results2.html", userData=userData, user_repos=user_repos, language_dict=language_dict, map_data=map_data, user_events=user_events, repo_commits=repo_commits)
         except AttributeError:
             app.logger.debug('error getting username from github, whoops')
             return "I don't know who you are; I should, but regretfully I don't", 500
@@ -144,6 +169,17 @@ def react():
         data = bk.re_to_json(username)
         return Flask.Response(response=json.dumps(data), status=201)
 
+@app.route('/organisation-map', methods=['POST'])
+def organisationMaps():
+     if request.method == "POST":
+        received_data = request.get_json()
+      
+        print(f"received data: {received_data}")
+
+        mapOrg = received_data['data']
+        mapOrgData = orgMapAPI.getOrgLocationData(mapOrg)
+        return flask.Response(response=json.dumps(mapOrgData), status=201)
+        
 if __name__ == "__main__":
     app.secret_key = "super_duper_secret_key"
     app.run(debug=True)
