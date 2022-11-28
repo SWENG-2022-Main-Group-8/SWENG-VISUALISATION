@@ -20,6 +20,10 @@ client_id = app.config.get("CLIENT_ID")
 client_secret = app.config.get("CLIENT_SECRET")
 
 @app.route('/')
+def login_page():
+    return render_template('login.html')
+
+@app.route('/menu')
 def index():
     return render_template("index.html")
 
@@ -92,11 +96,6 @@ def results_page():
 def map_page():
     return render_template("map.html")
 
-
-@app.route('/login')
-def login_page():
-    return render_template('login.html')
-
 @app.route('/handlegithublogin')
 def handle_github_login():
     fetch_url = 'https://github.com/login/oauth/authorize' + \
@@ -120,7 +119,7 @@ def handle_github_callback():
 
         if 'access_token' in resp:
             current_session['access_token'] = resp['access_token']
-            return redirect("/results")
+            return redirect("/menu")
         else:
             return jsonify(error="Error retrieving access_token"), 404
     else:

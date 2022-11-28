@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="keywords" content="HTML, CSS, JavaScript">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/styles.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/menu.css') }}">
         <title>Group 8 Visualizer</title>
     </head>
 
@@ -17,7 +17,7 @@
                         <div class="icons">
                             <i class="fa fa-user"></i>
                         </div>
-                        <h1 class="homeCardTitle">Search for user</h1>
+                        <h1 class="homeCardTitle">Get User Stats</h1>
                     </div>
                     <div class="homeCard-border"></div>
                 </div>
@@ -34,6 +34,6 @@
                 </div>
             </a>
         </div>
-        <script src="./app.js" defer></script>
+        <script src="{{ url_for('static',filename='app.js') }}" defer></script>
     </body>
 </html>
