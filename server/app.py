@@ -1,15 +1,17 @@
+import sys
 from flask import Flask, request, redirect, render_template, jsonify
 from flask import session as current_session
 import requests
 import flask
-from library import username as usernameAPI
-from library import individualMap as mapAPI
-from library import languageData as languagesAPI
-from library import commitData as commitAPI
-from library import org_maps as orgMapAPI
+import library.username as usernameAPI
+import library.individualMap as mapAPI
+import library.languageData as languagesAPI
+import library.commitData as commitAPI
+import library.org_maps as orgMapAPI
 from flask_cors import CORS
 import json
 import os
+
 
 app = Flask(__name__)
 env_config = os.getenv("APP_SETTINGS", "config.DevelopmentConfig")
