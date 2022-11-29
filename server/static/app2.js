@@ -63,11 +63,21 @@ function languagesChart(language_info) {
     let data = [];
     let backgroundColor = [];
 
+    // for (let language in language_info) {
+    //     label.push(language);
+    //     data.push(language_info[language]);
+    //     backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
+    //
+    // }
+
     for (let language in language_info) {
+        const info = language_info[language].split(',',2);
+        let bytesOfLanguages = info[0];
+        let numberOfLanguages = info[1];
+
         label.push(language);
-        data.push(language_info[language]);
+        data.push(numberOfLanguages);
         backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
-    
     }
 
     draw1('language', 'pie', 'languages', `User's languages`, label, data, backgroundColor);

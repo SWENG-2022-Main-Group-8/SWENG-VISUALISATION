@@ -113,6 +113,7 @@
                 const mapData = {{map_data|tojson|safe}};
                 console.log(mapData)
                 const languageData = {{language_dict|tojson|safe}};
+                {#print(languageData)#}
                 let first_repo_data = repo_commits_local[0]
                 console.log(repo_commits_local)
                 fillMapData(mapData)
