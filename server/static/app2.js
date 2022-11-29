@@ -63,8 +63,6 @@ function languagesChart(language_info) {
     let data = [];
     let backgroundColor = [];
 
-
-
     for (let language in language_info) {
         label.push(language);
         data.push(language_info[language]);
@@ -84,19 +82,17 @@ function fillCommitChart(commitData) {
     repoChart = new Chart(
         document.getElementById('repo_commits'),
         {
-          type: 'bar',
-          data: {
-            labels: [...Array(52).keys()].map(i => i+1),
-            datasets: [
-              {
-                label: 'Commits by week',
-                data: data,
-                backgroundColor: generateColours(data)
-              }
-            ]
-          }
+            type: 'bar',
+            data: {
+                labels: [...Array(52).keys()].map(i => i+1),
+                datasets: [{
+                    label: 'Commits by week',
+                    data: data,
+                    backgroundColor: generateColours(data)
+                }]
+            }
         }
-      );
+    );
     
 }
 
@@ -178,6 +174,13 @@ function draw2(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
                 display: true,
                 text: titleText,
                 fontSize: 20
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
             },
             legend: {
                 display: false,
