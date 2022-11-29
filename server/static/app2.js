@@ -60,7 +60,8 @@ async function getLanguages(repo, user) {
 function languagesChart(language_info) {
     console.log(language_info)
     let label = [];
-    let data = [];
+    let bytes = [];
+    let repos = [];
     let backgroundColor = [];
 
     // for (let language in language_info) {
@@ -76,13 +77,14 @@ function languagesChart(language_info) {
         let numberOfLanguages = info[1];
 
         label.push(language);
-        data.push(numberOfLanguages);
+        bytes.push(bytesOfLanguages);
+        repos.push(numberOfLanguages);
         backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
     }
 
-    draw1('languagePie', 'pie', 'languages', `User's languages`, label, data, backgroundColor);
+    draw1('languagePie', 'pie', 'languages', `User's languages (in bytes)`, label, bytes, backgroundColor);
 
-    draw2('languageBar', 'bar', 'languages', `Number of repos that use a language`, label, data, backgroundColor);
+    draw2('languageBar', 'bar', 'languages', `Number of repos that use the language`, label, repos, backgroundColor);
 }
 
 function fillCommitChart(commitData) {
