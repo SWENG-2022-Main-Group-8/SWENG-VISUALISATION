@@ -63,6 +63,8 @@ function languagesChart(language_info) {
     let data = [];
     let backgroundColor = [];
 
+
+
     for (let language in language_info) {
         label.push(language);
         data.push(language_info[language]);
@@ -70,7 +72,9 @@ function languagesChart(language_info) {
     
     }
 
-    draw1('language', 'pie', 'languages', `User's languages`, label, data, backgroundColor);
+    draw1('languagePie', 'pie', 'languages', `User's languages`, label, data, backgroundColor);
+
+    draw2('languageBar', 'bar', 'languages', `Number of repos that use a language`, label, data, backgroundColor);
 }
 
 function fillCommitChart(commitData) {
@@ -151,4 +155,51 @@ function draw1(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
     });
 }
 
+function draw2(ctx, type, datasetLabel, titleText, label, data, backgroundColor) {
+
+    let myChart = document.getElementById(ctx).getContext('2d');
+
+    chart2 = new Chart(myChart, {
+        type: type,
+        data: {
+            labels: label,
+            datasets: [{
+                label: datasetLabel,
+                data: data,
+                backgroundColor: backgroundColor,
+                borderWidth: 1,
+                borderColor: '#777',
+                hoverBorderWidth: 2,
+                hoverBorderColor: '#000'
+            }],
+        },
+        options: {
+            title: {
+                display: true,
+                text: titleText,
+                fontSize: 20
+            },
+            legend: {
+                display: true,
+                position: 'bottom',
+                labels: {
+                    fontColor: '#000'
+                }
+            },
+            layout: {
+                padding: {
+                    left: 50,
+                    right: 0,
+                    bottom: 0,
+                    top: 0
+                }
+            },
+            tooltips: {
+                enabled: true
+            }
+        }
+    });
+}
+
 var chart1 = null;
+var chart2 = null;
