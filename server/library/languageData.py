@@ -1,9 +1,9 @@
 import json
 import requests
 
-def retrieveLanguages(username):
-    responseRepo = requests.get("https://api.github.com/users/" + username + "/repos")
-    repoData = responseRepo.json()
+def retrieveLanguages(username, repoData):
+    # responseRepo = requests.get("https://api.github.com/users/" + username + "/repos")
+    # repoData = responseRepo.json()
     linesOfCodeDict = {}
     languageCounterDict = {}
     for i in repoData:

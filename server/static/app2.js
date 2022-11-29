@@ -60,17 +60,31 @@ async function getLanguages(repo, user) {
 function languagesChart(language_info) {
     console.log(language_info)
     let label = [];
-    let data = [];
+    let bytes = [];
+    let repos = [];
     let backgroundColor = [];
 
+    // for (let language in language_info) {
+    //     label.push(language);
+    //     data.push(language_info[language]);
+    //     backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
+    //
+    // }
+
     for (let language in language_info) {
+        const info = language_info[language].split(',',2);
+        let bytesOfLanguages = info[0];
+        let numberOfLanguages = info[1];
+
         label.push(language);
-        data.push(language_info[language]);
+        bytes.push(bytesOfLanguages);
+        repos.push(numberOfLanguages);
         backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
-    
     }
 
-    draw1('language', 'pie', 'languages', `User's languages`, label, data, backgroundColor);
+    draw1('languagePie', 'pie', 'languages', `User's languages (in bytes)`, label, bytes, backgroundColor);
+
+    draw2('languageBar', 'bar', 'languages', `Number of repos that use the language`, label, repos, backgroundColor);
 }
 
 function fillCommitChart(commitData) {
@@ -80,19 +94,17 @@ function fillCommitChart(commitData) {
     repoChart = new Chart(
         document.getElementById('repo_commits'),
         {
-          type: 'bar',
-          data: {
-            labels: [...Array(52).keys()].map(i => i+1),
-            datasets: [
-              {
-                label: 'Commits by week',
-                data: data,
-                backgroundColor: generateColours(data)
-              }
-            ]
-          }
+            type: 'bar',
+            data: {
+                labels: [...Array(52).keys()].map(i => i+1),
+                datasets: [{
+                    label: 'Commits by week',
+                    data: data,
+                    backgroundColor: generateColours(data)
+                }]
+            }
         }
-      );
+    );
     
 }
 
@@ -151,4 +163,58 @@ function draw1(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
     });
 }
 
+function draw2(ctx, type, datasetLabel, titleText, label, data, backgroundColor) {
+
+    let myChart = document.getElementById(ctx).getContext('2d');
+
+    chart2 = new Chart(myChart, {
+        type: type,
+        data: {
+            labels: label,
+            datasets: [{
+                label: datasetLabel,
+                data: data,
+                backgroundColor: backgroundColor,
+                borderWidth: 1,
+                borderColor: '#777',
+                hoverBorderWidth: 2,
+                hoverBorderColor: '#000'
+            }],
+        },
+        options: {
+            title: {
+                display: true,
+                text: titleText,
+                fontSize: 20
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+            legend: {
+                display: false,
+                position: 'bottom',
+                labels: {
+                    fontColor: '#000'
+                }
+            },
+            layout: {
+                padding: {
+                    left: 50,
+                    right: 0,
+                    bottom: 0,
+                    top: 0
+                }
+            },
+            tooltips: {
+                enabled: true
+            }
+        }
+    });
+}
+
 var chart1 = null;
+var chart2 = null;

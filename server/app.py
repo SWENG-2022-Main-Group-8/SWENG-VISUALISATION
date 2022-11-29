@@ -54,14 +54,42 @@ def results_page():
         #Get logged in user repos
         user_repos = requests.get(repos_url, auth=('access_token', current_session['access_token']))
         user_repos = user_repos.json()
+
         language_dict = {}
-        for repo in user_repos:
-            if repo['language']:
-                if repo['language'] not in language_dict:
-                    language_dict[repo['language']] = 1
-                else:
-                    language_dict[repo['language']] = language_dict[repo['language']] + 1
-        
+        # Get languages(number of times used)
+        # for repo in user_repos:
+        #     if repo['language']:
+        #         if repo['language'] not in language_dict:
+        #             language_dict[repo['language']] = 1
+        #         else:
+        #             language_dict[repo['language']] = language_dict[repo['language']] + 1
+        # print(language_dict)
+        # Get languages(bytes of code, number of times used)
+        linesOfCodeDict = {}
+        languageCounterDict = {}
+        for i in user_repos:
+            repo = i['name']
+            language_url = f'https://api.github.com/repos/{username}/{repo}/languages'
+            response = (requests.get(language_url, auth=('access_token', current_session['access_token'])))
+            languageData = json.loads(response.text)
+            for k, v in languageData.items():
+                try:
+                    if k == {} or k == 'message' or k == 'documentation_url':
+                        continue
+                    countBefore = int(languageCounterDict[k])
+                    before = int(linesOfCodeDict[k])
+                    countAfter = 1 + countBefore
+                    languageCounterDict[k] = str(countAfter)
+                    result = int(v) + before
+                    linesOfCodeDict[k] = str(result)
+                except:
+                    languageCounterDict[k] = 1
+                    linesOfCodeDict[k] = v
+        # languageDict has language Keys, but will have modified values for languages, with the first value containing lines
+        # of code written for that language. Then seperated with a comma there is the amount of times this language was utilised by the user
+        # in all their public repos e.g. 'Java' : '5000,2'
+        for k, v in linesOfCodeDict.items():
+            language_dict[k] = "" + str(v) + "," + str(languageCounterDict[k])
         #Get user events
         if 'username' not in request.args:
             events_url = f'https://api.github.com/users/{username}/events'
@@ -83,7 +111,7 @@ def results_page():
                     repo_commits.append(this_repos_commits)
         
         repo_commits.sort(key=lambda x: sum(x['commits']), reverse=True)
-        print(repo_commits)
+        # print(repo_commits)
 
         try:
             return render_template("results2.html", userData=userData, user_repos=user_repos, language_dict=language_dict, map_data=map_data, user_events=user_events, repo_commits=repo_commits)
