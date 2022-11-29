@@ -55,16 +55,8 @@ def results_page():
         user_repos = requests.get(repos_url, auth=('access_token', current_session['access_token']))
         user_repos = user_repos.json()
 
-        language_dict = {}
-        # Get languages(number of times used)
-        # for repo in user_repos:
-        #     if repo['language']:
-        #         if repo['language'] not in language_dict:
-        #             language_dict[repo['language']] = 1
-        #         else:
-        #             language_dict[repo['language']] = language_dict[repo['language']] + 1
-        # print(language_dict)
         # Get languages(bytes of code, number of times used)
+        language_dict = {}
         linesOfCodeDict = {}
         languageCounterDict = {}
         for i in user_repos:
