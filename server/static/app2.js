@@ -180,7 +180,7 @@ function draw2(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
                 fontSize: 20
             },
             legend: {
-                display: true,
+                display: false,
                 position: 'bottom',
                 labels: {
                     fontColor: '#000'
