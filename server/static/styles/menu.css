@@ -1,10 +1,11 @@
-body {
-    background-color: #1E1E1E;
-    color: #F0F0F0;
+:root {
+    --bg-color: rgb(20, 20, 20);
+    --card-color: rgb(23, 23, 23);
 }
 
-.homepage{
+.homepage {
     align-items: center;
+    background-color: var(--bg-color);
     display: flex;
     height: 100vh;
     justify-content: center;
@@ -13,15 +14,15 @@ body {
     padding: 0px;
 }
 
-#homeCards{
-    display:flex;
+#homeCards {
+    display: flex;
     flex-wrap: wrap;
     gap: 10px;
     max-width: 916px;
     width: calc(100% - 20px);
 }
 
-.homeCard{
+.homeCard {
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     cursor: pointer;
@@ -34,11 +35,12 @@ body {
     opacity: 1;
 }
 
-#homeCards:hover > .homeCard > .homeCard-border{
-    opacity:1;
+#homeCards:hover>.homeCard>.homeCard-border {
+    opacity: 1;
 }
 
-.homeCard::before, .homeCard > .homeCard-border {
+.homeCard::before,
+.homeCard>.homeCard-border {
     opacity: 0;
     transition: opacity 500ms;
     border-radius: inherit;
@@ -51,26 +53,22 @@ body {
     z-index: 2;
 }
 
-.homeCard::before{
-    background: radial-gradient(
-        800px circle at var(--mouse-x) var(--mouse-y),
-        rgba(255, 255, 255, 0.06),
-        transparent 40%
-    );
+.homeCard::before {
+    background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y),
+            rgba(255, 255, 255, 0.06),
+            transparent 40%);
     z-index: 3;
 }
 
-.homeCard > .homeCard-border {
-    background: radial-gradient(
-        800px circle at var(--mouse-x) var(--mouse-y),
-        rgba(255, 255, 255, 0.3),
-        transparent 40%
-    );
+.homeCard>.homeCard-border {
+    background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y),
+            rgba(255, 255, 255, 0.3),
+            transparent 40%);
     z-index: 1;
 }
 
-.homeCard > .homeCard-content {
-    background-color: var(--homeCard-color);
+.homeCard>.homeCard-content {
+    background-color: var(--card-color);
     border-radius: inherit;
     inset: 1px;
     height: calc(100% - 2px);
@@ -80,14 +78,14 @@ body {
     text-align: center;
 }
 
-.homeCardTitle{
+.homeCardTitle {
     position: absolute;
     width: 100%;
-    bottom:0;
+    bottom: 0;
     color: white;
 }
 
-.fa{
+.fa {
     color: white;
     font-size: 500%;
     padding-top: 50px;

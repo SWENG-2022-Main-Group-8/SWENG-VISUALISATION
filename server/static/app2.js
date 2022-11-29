@@ -218,3 +218,14 @@ function draw2(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
 
 var chart1 = null;
 var chart2 = null;
+
+document.getElementById("homeCards").onmousemove = e => {
+    for(const card of document.getElementsByClassName("homeCard")){
+        const rect = card.getBoundingClientRect(),
+            x = e.clientX - rect.left,
+            y = e.clientY - rect.top;
+
+        card.style.setProperty("--mouse-x", `${x}px`)
+        card.style.setProperty("--mouse-y", `${y}px`)
+    }
+}
