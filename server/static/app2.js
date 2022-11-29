@@ -79,6 +79,9 @@ function languagesChart(language_info) {
 
     draw2('languageBar', 'bar', 'languages', `Number of repos that use the language`, label, repos, backgroundColor);
 }
+function commitsGraph(commitsData) {
+    console.log(commitsData)
+}
 
 function fillCommitChart(commitData) {
     const data = commitData['commits'];

@@ -8,6 +8,7 @@ from library import languageData as languagesAPI
 from library import commitData as commitAPI
 from library import org_maps as orgMapAPI
 from flask_cors import CORS
+from datetime import datetime, date, timedelta
 import json
 import os
 
@@ -55,7 +56,7 @@ def results_page():
         user_repos = requests.get(repos_url, auth=('access_token', current_session['access_token']))
         user_repos = user_repos.json()
 
-        # Get languages(bytes of code, number of times used)
+        #Get languages(bytes of code, number of times used)
         language_dict = {}
         linesOfCodeDict = {}
         languageCounterDict = {}
@@ -77,11 +78,54 @@ def results_page():
                 except:
                     languageCounterDict[k] = 1
                     linesOfCodeDict[k] = v
-        # languageDict has language Keys, but will have modified values for languages, with the first value containing lines
-        # of code written for that language. Then seperated with a comma there is the amount of times this language was utilised by the user
-        # in all their public repos e.g. 'Java' : '5000,2'
         for k, v in linesOfCodeDict.items():
             language_dict[k] = "" + str(v) + "," + str(languageCounterDict[k])
+
+        #Get number of commits from past four weeks till today
+        commitDict = {}
+
+        #dateRequired = datetime.strptime((requiredDay + "/" + requiredMonth + "/" + requiredYear), '%d/%m/%Y')
+        dateRequired1 = datetime.now().strftime('%d/%m/%Y')
+        print(dateRequired1)
+        dateRequired = datetime.strptime(dateRequired1, '%d/%m/%Y')
+        print(dateRequired.date())
+        weekBefore = dateRequired.date() - timedelta(days=7)
+        commitDict[weekBefore.strftime('%d/%m/%Y')] = 0
+        for i in range(3):
+            weekBefore = weekBefore - timedelta(days=7)
+            commitDict[weekBefore.strftime('%d/%m/%Y')] = 0
+
+        commitsInTotal = 0
+        for i in user_repos:
+            repo = i['name']
+            try:
+                commits_url = f'https://api.github.com/repos/{username}/{repo}/commits?per_page=100'
+                response = (requests.get(commits_url, auth=('access_token', current_session['access_token'])))
+            except requests.exceptions.RequestException as e: continue
+            contributorData = json.loads(response.text)
+            for i in contributorData:
+                try:
+                    name = i['author']['login']
+                except: continue # for error of i['author']['login'] not existing in certain cases and giving None
+                if(name != username) : continue
+                commitsInTotal = commitsInTotal + 1
+                date = i['commit']['author']['date']
+                year = date[0:4]
+                month = date[5:7]
+                day = date[8:10]
+                currentDate = datetime.strptime((day + "/" + month + "/" + year), '%d/%m/%Y')
+                for k,v in commitDict.items():
+                    currentWeek = datetime.strptime(k, '%d/%m/%Y')
+                    print(currentWeek.date())
+                    print(currentDate.date())
+
+                    weekAfter = currentWeek.date() + timedelta(days=7)
+                    print(weekAfter)
+                    if((currentDate.date() == dateRequired1 and weekAfter == currentDate.date()) or currentWeek.date() <= currentDate.date() < weekAfter) :
+                        print("S")
+                        v = v + 1
+                        commitDict[k] = v
+            print(commitDict)
         #Get user events
         if 'username' not in request.args:
             events_url = f'https://api.github.com/users/{username}/events'
@@ -106,7 +150,7 @@ def results_page():
         # print(repo_commits)
 
         try:
-            return render_template("results2.html", userData=userData, user_repos=user_repos, language_dict=language_dict, map_data=map_data, user_events=user_events, repo_commits=repo_commits)
+            return render_template("results2.html", userData=userData, user_repos=user_repos, language_dict=language_dict, map_data=map_data, user_events=user_events, repo_commits=repo_commits, commits_dict=commitDict)
         except AttributeError:
             app.logger.debug('error getting username from github, whoops')
             return "I don't know who you are; I should, but regretfully I don't", 500
