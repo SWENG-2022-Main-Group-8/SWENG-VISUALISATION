@@ -78,28 +78,25 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row justify-content-center mt-6 mb-4">
-                        <div class="mt-3 col-md-12">
-                            <div class="well">
-                                <h3>Your top repos this year</h3>
-                                <div class="repos-chart">
-                                    <canvas id="repo_commits"></canvas>
-                                </div>
-                                <select onchange="switchRepoChart()" id="repo_chart_selector" class="form-select" aria-label="Default select example">
-                                    {% for i in range(8) %}
-                                    {% if i == 0 %}
-                                    <option selected>{{repo_commits[1]['name']}}</option>
-                                    {% endif %}
-                                    <option value="{{repo_commits[i]['name']}}">{{repo_commits[i]['name']}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>    
-                    </div>
                 </div>
             </div>
-            
-            
+            <div class="row justify-content-center mt-6 mb-4">
+                <div class="col-xl-8">
+                    <h3>Your top repos this year</h3>
+                    <div class="repos-chart">
+                        <canvas id="repo_commits"></canvas>
+                    </div>
+                    <select onchange="switchRepoChart()" id="repo_chart_selector" class="form-select"
+                        aria-label="Default select example">
+                        {% for i in range(8) %}
+                        {% if i == 0 %}
+                        <option selected>{{repo_commits[1]['name']}}</option>
+                        {% endif %}
+                        <option value="{{repo_commits[i]['name']}}">{{repo_commits[i]['name']}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
 
             <!-- <div class="row justify-content-center" >
                 <div class="col-xl-10">
