@@ -5,8 +5,6 @@
 
 .loginpage{
     background-color: var(--bg-color);
-    font-family:'Courier New', Courier, monospace;
-    color:#ecede8;
     height: 100vh;
     margin: 0px;
     overflow: hidden;
@@ -23,17 +21,10 @@
 }
 
 .gradient-bg {
-    background-image: linear-gradient(to right top, #100736,#ad92f7, #420080, #54278b, #100736);
+    background-image: linear-gradient(to right top, #3a2450, #44255f, #4e266f, #5a267e, #66248d, #67208e, #671c8f, #681790, #5c1184, #500a77, #45046b, #3a005f);
 }
 
 .mt-6 {
     margin-top: 7rem;
-}
-
-.repo{
-    width: 50%;
-    float: left;
-    padding: 20px;
-    border: 2px solid black;
 }
 
