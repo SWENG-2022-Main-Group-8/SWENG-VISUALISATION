@@ -1,11 +1,13 @@
 :root {
-    --bg-color: rgb(20, 20, 20);
-    --card-color: rgb(23, 23, 23);
+    --bg-color: #100736;
+    --card-color: #837fb8;
 }
 
 .homepage {
+    font-family:'Courier New', Courier, monospace;
+    color:#ecede8;
+    font-size: medium;
     align-items: center;
-    background-color: var(--bg-color);
     display: flex;
     height: 100vh;
     justify-content: center;
@@ -23,11 +25,10 @@
 }
 
 .homeCard {
-    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     cursor: pointer;
-    height: 260px;
-    width: 451px;
+    height: 250px;
+    width: 441px;
     position: relative;
 }
 
@@ -68,7 +69,6 @@
 }
 
 .homeCard>.homeCard-content {
-    background-color: var(--card-color);
     border-radius: inherit;
     inset: 1px;
     height: calc(100% - 2px);
@@ -79,14 +79,25 @@
 }
 
 .homeCardTitle {
+    font-weight: lighter;
     position: absolute;
     width: 100%;
     bottom: 0;
-    color: white;
+    color: #ecede8;
+    text-shadow: 1px 1px 2px black;
 }
 
 .fa {
-    color: white;
+    color: #ecede8;
     font-size: 500%;
     padding-top: 50px;
+    text-shadow: 1px 1px 2px black;
+}
+
+.gradient-bg {
+    background-image: linear-gradient(to right top, #100736, #ad92f7,#420080, #54278b, #100736);
+}
+
+.gradient-button {
+    background-image: linear-gradient(to right top, #100736,#ad92f7,  #100736);
 }
