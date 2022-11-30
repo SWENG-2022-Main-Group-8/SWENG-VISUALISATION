@@ -25,7 +25,8 @@ client_secret = app.config.get("CLIENT_SECRET")
 
 async def get_user_commit_data(session, username, repo_name):
     commit_history_url = f'https://api.github.com/repos/{username}/{repo_name}/stats/participation'
-    commit_history = (await session.get(commit_history_url, auth=httpx.DigestAuth('access_token', current_session['access_token']))) # dont wait for the response of API
+    at = current_session['access_token']
+    commit_history = (await session.get(commit_history_url, auth=('access_token', at))) # dont wait for the response of API
     return commit_history.json()
 
 # function converted to coroutine
