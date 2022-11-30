@@ -56,7 +56,24 @@ async function getLanguages(repo, user) {
 
     draw1('language', 'pie', 'languages', `User's languages (in bytes)`, label, data, backgroundColor);
 }
+function insertionDeletionChart(insertionDeletionData) {
+    console.log(insertionDeletionData)
+    let label = [];
+    let commitsData = []
+    let insertionsData = []
+    let deletionsData = []
 
+    let backgroundColor = [];
+    for (let repo in insertionDeletionData) {
+        const info = insertionDeletionData[repo].split(',',3);
+        commitsData.push(info[0]);
+        insertionsData.push(info[1]);
+        deletionsData.push(info[2]);
+        label.push(repo);
+        backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
+    }
+    draw4('insertionsDeletions', 'bar', 'line', 'Additions, Deletions and Commits of Repositories', label, commitsData, insertionsData, deletionsData, backgroundColor);
+}
 function languagesChart(language_info) {
     console.log(language_info)
     let label = [];
@@ -276,6 +293,83 @@ function draw3(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
 
     });
 }
+function draw4(ctx, type, type2, titleText, label, commits, insertions, deletions, backgroundColor) {
 
+    let myChart = document.getElementById(ctx).getContext('2d');
+    chart4 = new Chart(myChart, {
+        type: type,
+        data: {
+            labels: label,
+            datasets: [{
+                type : type2,
+                label: 'commits',
+                data: commits,
+                backgroundColor: backgroundColor,
+                borderWidth: 1,
+                borderColor: '#777',
+                hoverBorderWidth: 2,
+                hoverBorderColor: '#000'
+            },
+                {
+                type : type,
+                label: 'Insertions',
+                data: insertions,
+                backgroundColor: backgroundColor,
+                borderWidth: 1,
+                borderColor: '#777',
+                hoverBorderWidth: 2,
+                hoverBorderColor: '#000'
+            },
+            {
+                type : type,
+                label: 'Deletions',
+                data: deletions,
+                backgroundColor: backgroundColor,
+                borderWidth: 1,
+                borderColor: '#777',
+                hoverBorderWidth: 2,
+                hoverBorderColor: '#000'
+            }]
+        },
+        options: {
+            elements: {
+                bar: {
+                    borderWidth: 2,
+                }
+            },
+            title: {
+                display: true,
+                text: titleText,
+                fontSize: 20
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+            legend: {
+                display: false,
+                // position: 'right',
+                labels: {
+                    fontColor: '#000'
+                }
+            },
+            layout: {
+                padding: {
+                    left: 50,
+                    right: 0,
+                    bottom: 0,
+                    top: 0
+                }
+            },
+            tooltips: {
+                enabled: true
+            }
+        }
+
+    });
+}
 var chart1 = null;
 var chart2 = null;
