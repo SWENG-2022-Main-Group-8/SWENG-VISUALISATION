@@ -137,11 +137,13 @@
                 console.log(mapData)
                 const languageData = {{language_dict|tojson|safe}};
                 const commitsData = {{commits_dict|tojson|safe}};
+                const insertionDeletionData = {{insertionDeletion_dict|tojson|safe}};
                 let first_repo_data = repo_commits_local[0]
                 console.log(repo_commits_local)
                 fillMapData(mapData)
                 commitsGraph(commitsData)
                 languagesChart(languageData)
+                insertionDeletionChart(insertionDeletionData)
                 fillCommitChart(first_repo_data)
             }
 
