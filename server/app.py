@@ -128,6 +128,32 @@ def results_page():
             contribution = (commitsByUser/commitsInRepo) * 100
             contributionDict[repo] = str(contribution) + "%"
         print(contributionDict)
+
+        #Getting number of commits, insertions, deletions from repos
+        commitInsertionDeletionDict = {}
+        for i in user_repos:
+            repo = i['name']
+            commits = 0
+            insertions = 0
+            deletions = 0
+            # try:
+            insertions_url = "https://api.github.com/repos/{}/{}/stats/contributors".format(username, repo)
+            response = (requests.get(insertions_url, auth=('access_token', current_session['access_token'])))
+            # except requests.exceptions.RequestException as e: continue
+            stats = json.loads(response.text)
+            for stat in stats:
+                try:
+                    name = stat['author']['login']
+                except: continue # for error of i['author']['login'] not existing in certain cases and giving None
+                if name == username:
+                    commits = stat['total'];
+                    for ad in stat['weeks']:
+                        insertions = insertions + ad['a']
+                        deletions = deletions + ad['d']
+            if commits == 0 : continue
+            commitInsertionDeletionDict[repo] = str(commits) + "," + str(insertions) + "," + str(deletions)
+        print(commitInsertionDeletionDict)
+
         #Get user events
         if 'username' not in request.args:
             events_url = f'https://api.github.com/users/{username}/events'
