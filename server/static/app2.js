@@ -95,19 +95,24 @@ function languagesChart(language_info) {
 //Creates the graph of top repos this year
 function fillCommitChart(commitData) {
     const data = commitData['commits'];
+    console.log(data)
 
-
+    if(repoChart != null) {
+        repoChart.destroy();
+    }
     repoChart = new Chart(
         document.getElementById('repo_commits'),
         {
-            type: 'bar',
+            type: 'line',
             data: {
                 labels: [...Array(52).keys()].map(i => i+1),
                 datasets: [{
                     label: 'Commits by week',
                     data: data,
-                    backgroundColor: generateColours(data)
-                }]
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                  }]
             }
         }
     );

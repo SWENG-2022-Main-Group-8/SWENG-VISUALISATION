@@ -9,7 +9,7 @@ class ProductionConfig():
 
 
 class DevelopmentConfig():
-    DEBUG = False
+    DEBUG = True
     DEVELOPMENT = False
     CLIENT_ID = client_id_local
     CLIENT_SECRET = client_secret_local
