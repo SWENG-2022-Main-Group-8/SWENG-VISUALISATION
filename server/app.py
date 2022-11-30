@@ -83,12 +83,10 @@ def results_page():
 
         #Get number of commits from past four weeks till today
         commitDict = {}
-
-        #dateRequired = datetime.strptime((requiredDay + "/" + requiredMonth + "/" + requiredYear), '%d/%m/%Y')
-        dateRequired1 = datetime.now().strftime('%d/%m/%Y')
-        print(dateRequired1)
-        dateRequired = datetime.strptime(dateRequired1, '%d/%m/%Y')
-        print(dateRequired.date())
+        contributionDict = {}
+        dateRequired = datetime.strptime(("25" + "/" + "10" + "/" + "2022"), '%d/%m/%Y')
+        # dateRequired1 = datetime.now().strftime('%d/%m/%Y')
+        # dateRequired = datetime.strptime(dateRequired1, '%d/%m/%Y')
         weekBefore = dateRequired.date() - timedelta(days=7)
         commitDict[weekBefore.strftime('%d/%m/%Y')] = 0
         for i in range(3):
@@ -98,6 +96,8 @@ def results_page():
         commitsInTotal = 0
         for i in user_repos:
             repo = i['name']
+            commitsByUser = 0
+            commitsInRepo = 0
             try:
                 commits_url = f'https://api.github.com/repos/{username}/{repo}/commits?per_page=100'
                 response = (requests.get(commits_url, auth=('access_token', current_session['access_token'])))
@@ -107,7 +107,11 @@ def results_page():
                 try:
                     name = i['author']['login']
                 except: continue # for error of i['author']['login'] not existing in certain cases and giving None
-                if(name != username) : continue
+                if(name != username) :
+                    commitsInRepo = commitsInRepo + 1
+                    continue
+                commitsInRepo = commitsInRepo + 1
+                commitsByUser = commitsByUser + 1
                 commitsInTotal = commitsInTotal + 1
                 date = i['commit']['author']['date']
                 year = date[0:4]
@@ -120,6 +124,10 @@ def results_page():
                     if((currentDate.date() == dateRequired.date() and weekAfter == currentDate.date()) or currentWeek.date() <= currentDate.date() < weekAfter) :
                         v = v + 1
                         commitDict[k] = v
+            if(commitsInRepo == 0): continue
+            contribution = (commitsByUser/commitsInRepo) * 100
+            contributionDict[repo] = str(contribution) + "%"
+        print(contributionDict)
         #Get user events
         if 'username' not in request.args:
             events_url = f'https://api.github.com/users/{username}/events'

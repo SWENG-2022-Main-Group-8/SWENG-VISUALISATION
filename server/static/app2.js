@@ -81,12 +81,20 @@ function languagesChart(language_info) {
 }
 function commitsGraph(commitsData) {
     console.log(commitsData)
+    let label = [];
+    let commits = [];
+    let backgroundColor = [];
+
+    for (let date in commitsData) {
+        label.push(date);
+        commits.push(commitsData[date]);
+        backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
+    }
+    draw3('commitBar', 'bar', 'commits', `Commit's in the past four weeks`, label, commits, backgroundColor);
 }
 
 function fillCommitChart(commitData) {
     const data = commitData['commits'];
-
-
     repoChart = new Chart(
         document.getElementById('repo_commits'),
         {
@@ -193,6 +201,57 @@ function draw2(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
             legend: {
                 display: false,
                 position: 'bottom',
+                labels: {
+                    fontColor: '#000'
+                }
+            },
+            layout: {
+                padding: {
+                    left: 50,
+                    right: 0,
+                    bottom: 0,
+                    top: 0
+                }
+            },
+            tooltips: {
+                enabled: true
+            }
+        }
+    });
+}
+function draw3(ctx, type, datasetLabel, titleText, label, data, backgroundColor) {
+
+    let myChart = document.getElementById(ctx).getContext('2d');
+    chart3 = new Chart(myChart, {
+        type: type,
+        data: {
+            labels: label,
+            datasets: [{
+                label: datasetLabel,
+                data: data,
+                backgroundColor: backgroundColor,
+                borderWidth: 1,
+                borderColor: '#777',
+                hoverBorderWidth: 2,
+                hoverBorderColor: '#000'
+            }],
+        },
+        options: {
+            title: {
+                display: true,
+                text: titleText,
+                fontSize: 20
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+            legend: {
+                display: false,
+                position: 'top',
                 labels: {
                     fontColor: '#000'
                 }
