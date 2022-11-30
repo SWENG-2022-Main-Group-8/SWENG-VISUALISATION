@@ -237,6 +237,11 @@ function draw3(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
             }],
         },
         options: {
+            elements: {
+                bar: {
+                    borderWidth: 2,
+                }
+            },
             title: {
                 display: true,
                 text: titleText,
@@ -251,7 +256,7 @@ function draw3(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
             },
             legend: {
                 display: false,
-                position: 'top',
+                // position: 'right',
                 labels: {
                     fontColor: '#000'
                 }
@@ -268,6 +273,7 @@ function draw3(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
                 enabled: true
             }
         }
+
     });
 }
 
