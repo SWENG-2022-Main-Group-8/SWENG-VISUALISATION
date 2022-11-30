@@ -3,11 +3,13 @@ from flask import Flask, request, redirect, render_template, jsonify
 from flask import session as current_session
 import requests
 import flask
-import library.username as usernameAPI
-import library.individualMap as mapAPI
-import library.languageData as languagesAPI
-import library.commitData as commitAPI
-import library.org_maps as orgMapAPI
+import httpx
+import asyncio
+from library import username as usernameAPI
+from library import individualMap as mapAPI
+from library import languageData as languagesAPI
+from library import commitData as commitAPI
+from library import org_maps as orgMapAPI
 from flask_cors import CORS
 import json
 import os
@@ -21,12 +23,24 @@ CORS(app)
 client_id = app.config.get("CLIENT_ID")
 client_secret = app.config.get("CLIENT_SECRET")
 
+async def get_user_commit_data(session, username, repo_name):
+    commit_history_url = f'https://api.github.com/repos/{username}/{repo_name}/stats/participation'
+    commit_history = (await session.get(commit_history_url, auth=httpx.DigestAuth('access_token', current_session['access_token']))) # dont wait for the response of API
+    return commit_history.json()
+
+# function converted to coroutine
+async def get_user_commit_data_for_all_repos(username, repo_names):
+    async with httpx.AsyncClient() as session: # async client used for async functions
+        tasks = [get_user_commit_data(session,username,repo_name) for repo_name in repo_names]        
+        result = await asyncio.gather(*tasks, return_exceptions=True) # gather used to collect all coroutines and run them using loop and get the ordered response
+    return result
+
 @app.route('/')
 def index():
     return render_template("index.html")
 
 @app.route('/results', methods=["GET"])
-def results_page():
+async def results_page():
     if request.method == 'GET':
         repos_url = 'https://api.github.com/user/repos'
         access_token_url = 'https://api.github.com/user'
@@ -70,21 +84,17 @@ def results_page():
         map_data = mapAPI.getLatLng(userData['location'])
 
         #Get user repos commit history
-        repo_commits = []
-        for repo in user_repos:
-                repo_name = repo['name']
-                commit_history_url = f'https://api.github.com/repos/{username}/{repo_name}/stats/participation'
-                commit_history = requests.get(commit_history_url, auth=('access_token', current_session['access_token']))
-                commit_history = commit_history.json()
-                if 'message' not in commit_history:
-                    this_repos_commits = {'name': repo_name, 'commits': commit_history['owner']}
-                    repo_commits.append(this_repos_commits)
+        repo_commits_final = []
+        repo_names = [repo['name'] for repo in user_repos]
+        repo_commits = await get_user_commit_data_for_all_repos(username, repo_names)
+        for i in range(len(repo_commits)):
+            if 'message' not in repo_commits[i]:
+                this_repos_commits = {'name': user_repos[i]['full_name'], 'commits': repo_commits[i]['owner']}
+                repo_commits_final.append(this_repos_commits)
         
-        repo_commits.sort(key=lambda x: sum(x['commits']), reverse=True)
-        print(repo_commits)
-
+        repo_commits_final.sort(key=lambda x: sum(x['commits']), reverse=True)
         try:
-            return render_template("results2.html", userData=userData, user_repos=user_repos, language_dict=language_dict, map_data=map_data, user_events=user_events, repo_commits=repo_commits)
+            return render_template("results2.html", userData=userData, user_repos=user_repos, language_dict=language_dict, map_data=map_data, user_events=user_events, repo_commits=repo_commits_final)
         except AttributeError:
             app.logger.debug('error getting username from github, whoops')
             return "I don't know who you are; I should, but regretfully I don't", 500

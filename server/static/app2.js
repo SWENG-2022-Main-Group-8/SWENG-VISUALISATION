@@ -75,22 +75,25 @@ function languagesChart(language_info) {
 
 function fillCommitChart(commitData) {
     const data = commitData['commits'];
+    console.log(data)
 
-
+    if(repoChart != null) {
+        repoChart.destroy();
+    }
     repoChart = new Chart(
         document.getElementById('repo_commits'),
         {
-          type: 'bar',
-          data: {
-            labels: [...Array(52).keys()].map(i => i+1),
-            datasets: [
-              {
-                label: 'Commits by week',
-                data: data,
-                backgroundColor: generateColours(data)
-              }
-            ]
-          }
+            type: 'line',
+            data: {
+                labels: [...Array(52).keys()].map(i => i+1),
+                datasets: [{
+                    label: 'Commits by week',
+                    data: data,
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                  }]
+            }
         }
       );
     
@@ -151,4 +154,59 @@ function draw1(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
     });
 }
 
+function draw2(ctx, type, datasetLabel, titleText, label, data, backgroundColor) {
+
+    let myChart = document.getElementById(ctx).getContext('2d');
+
+    chart2 = new Chart(myChart, {
+        type: type,
+        data: {
+            labels: label,
+            datasets: [{
+                label: datasetLabel,
+                data: data,
+                backgroundColor: backgroundColor,
+                borderWidth: 1,
+                borderColor: '#777',
+                hoverBorderWidth: 2,
+                hoverBorderColor: '#000'
+            }],
+        },
+        options: {
+            title: {
+                display: true,
+                text: titleText,
+                fontSize: 20
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+            legend: {
+                display: false,
+                position: 'bottom',
+                labels: {
+                    fontColor: '#000'
+                }
+            },
+            layout: {
+                padding: {
+                    left: 50,
+                    right: 0,
+                    bottom: 0,
+                    top: 0
+                }
+            },
+            tooltips: {
+                enabled: true
+            }
+        }
+    });
+}
+
 var chart1 = null;
+var chart2 = null;
+var repoChart = null;
