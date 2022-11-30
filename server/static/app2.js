@@ -60,17 +60,31 @@ async function getLanguages(repo, user) {
 function languagesChart(language_info) {
     console.log(language_info)
     let label = [];
-    let data = [];
+    let bytes = [];
+    let repos = [];
     let backgroundColor = [];
 
+    // for (let language in language_info) {
+    //     label.push(language);
+    //     data.push(language_info[language]);
+    //     backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
+    //
+    // }
+
     for (let language in language_info) {
+        const info = language_info[language].split(',',2);
+        let bytesOfLanguages = info[0];
+        let numberOfLanguages = info[1];
+
         label.push(language);
-        data.push(language_info[language]);
+        bytes.push(bytesOfLanguages);
+        repos.push(numberOfLanguages);
         backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
-    
     }
 
-    draw1('language', 'pie', 'languages', `User's languages`, label, data, backgroundColor);
+    draw1('languagePie', 'pie', 'languages', `User's languages (in bytes)`, label, bytes, backgroundColor);
+
+    draw2('languageBar', 'bar', 'languages', `Number of repos that use the language`, label, repos, backgroundColor);
 }
 
 function fillCommitChart(commitData) {
@@ -95,7 +109,7 @@ function fillCommitChart(commitData) {
                   }]
             }
         }
-      );
+    );
     
 }
 
