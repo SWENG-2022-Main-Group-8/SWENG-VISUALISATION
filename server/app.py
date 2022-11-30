@@ -116,16 +116,10 @@ def results_page():
                 currentDate = datetime.strptime((day + "/" + month + "/" + year), '%d/%m/%Y')
                 for k,v in commitDict.items():
                     currentWeek = datetime.strptime(k, '%d/%m/%Y')
-                    print(currentWeek.date())
-                    print(currentDate.date())
-
                     weekAfter = currentWeek.date() + timedelta(days=7)
-                    print(weekAfter)
-                    if((currentDate.date() == dateRequired1 and weekAfter == currentDate.date()) or currentWeek.date() <= currentDate.date() < weekAfter) :
-                        print("S")
+                    if((currentDate.date() == dateRequired.date() and weekAfter == currentDate.date()) or currentWeek.date() <= currentDate.date() < weekAfter) :
                         v = v + 1
                         commitDict[k] = v
-            print(commitDict)
         #Get user events
         if 'username' not in request.args:
             events_url = f'https://api.github.com/users/{username}/events'
