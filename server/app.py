@@ -151,6 +151,7 @@ def results_page():
                         insertions = insertions + ad['a']
                         deletions = deletions + ad['d']
             if commits == 0 : continue
+            deletions = deletions * -1
             commitInsertionDeletionDict[repo] = str(commits) + "," + str(insertions) + "," + str(deletions)
         print(commitInsertionDeletionDict)
 

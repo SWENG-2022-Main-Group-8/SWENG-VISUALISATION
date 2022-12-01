@@ -304,72 +304,84 @@ function draw4(ctx, type, type2, titleText, label, commits, insertions, deletion
                 type : type2,
                 label: 'commits',
                 data: commits,
-                backgroundColor: backgroundColor,
+                // backgroundColor: backgroundColor,
                 borderWidth: 1,
-                borderColor: '#777',
+                borderColor: 'rgba(0, 0, 255, 0.2)',
                 hoverBorderWidth: 2,
-                hoverBorderColor: '#000'
-            },
-                {
+                fill: false,
+                hoverBorderColor: '#000',
+                yAxisID: 'y-axis-2',
+            }, {
+                yAxisID: 'y-axis-1',
                 type : type,
-                label: 'Insertions',
+                label: 'insertions',
                 data: insertions,
-                backgroundColor: backgroundColor,
+                backgroundColor: 'rgba(0, 255, 0, 0.2)',
                 borderWidth: 1,
-                borderColor: '#777',
                 hoverBorderWidth: 2,
-                hoverBorderColor: '#000'
+                hoverBorderColor: '#000',
             },
             {
                 type : type,
-                label: 'Deletions',
+                label: 'deletions',
                 data: deletions,
-                backgroundColor: backgroundColor,
+                backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                borderColor: 'white',
                 borderWidth: 1,
-                borderColor: '#777',
                 hoverBorderWidth: 2,
-                hoverBorderColor: '#000'
+                hoverBorderColor: '#000',
+                yAxisID: 'y-axis-1'
             }]
         },
         options: {
-            elements: {
-                bar: {
-                    borderWidth: 2,
-                }
-            },
+            responsive : true,
             title: {
                 display: true,
                 text: titleText,
                 fontSize: 20
             },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            },
             legend: {
-                display: false,
-                // position: 'right',
+                display: true,
+                position: 'top',
                 labels: {
                     fontColor: '#000'
                 }
             },
-            layout: {
-                padding: {
-                    left: 50,
-                    right: 0,
-                    bottom: 0,
-                    top: 0
-                }
-            },
+            // layout: {
+            //     padding: {
+            //         left: 50,
+            //         right: 0,
+            //         bottom: 0,
+            //         top: 0
+            //     }
+            // },
             tooltips: {
-                enabled: true
-            }
+                mode : 'index',
+                enabled: true,
+                intersect : true
+            },
+            scales: {
+                yAxes: [{
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    id: 'y-axis-1',
+                },{
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    id: 'y-axis-2',
+                    gridLines: {
+                        drawOnChartArea: false,
+                    },
+                }
+                ]
+            },
         }
 
     });
 }
 var chart1 = null;
 var chart2 = null;
+var chart3 = null;
+var chart4 = null;
