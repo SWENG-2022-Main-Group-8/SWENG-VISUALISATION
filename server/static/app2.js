@@ -112,17 +112,24 @@ function commitsGraph(commitsData) {
 
 function fillCommitChart(commitData) {
     const data = commitData['commits'];
+    console.log(data)
+
+    if(repoChart != null) {
+        repoChart.destroy();
+    }
     repoChart = new Chart(
         document.getElementById('repo_commits'),
         {
-            type: 'bar',
+            type: 'line',
             data: {
                 labels: [...Array(52).keys()].map(i => i+1),
                 datasets: [{
                     label: 'Commits by week',
                     data: data,
-                    backgroundColor: generateColours(data)
-                }]
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                  }]
             }
         }
     );
@@ -385,3 +392,5 @@ var chart1 = null;
 var chart2 = null;
 var chart3 = null;
 var chart4 = null;
+var repoChart = null;
+
