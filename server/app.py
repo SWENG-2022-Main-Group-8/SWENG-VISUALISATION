@@ -193,7 +193,7 @@ async def results_page():
         repo_commits_final.sort(key=lambda x: sum(x['commits']), reverse=True)
         
         try:
-            return render_template("results2.html", userData=userData, user_repos=user_repos, language_dict=language_dict, map_data=map_data, user_events=user_events, repo_commits=repo_commits, commits_dict=commitDict, insertionDeletion_dict=commitInsertionDeletionDict)
+            return render_template("results2.html", userData=userData, user_repos=user_repos, language_dict=language_dict, map_data=map_data, user_events=user_events, repo_commits=repo_commits_final, commits_dict=commitDict, insertionDeletion_dict=commitInsertionDeletionDict, )
 
         except AttributeError:
             app.logger.debug('error getting username from github, whoops')
