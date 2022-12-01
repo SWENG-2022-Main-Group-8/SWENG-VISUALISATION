@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+  <script src="https://cdn.anychart.com/js/7.13.1/anychart-bundle.min.js"></script>
+  <script src="/Users/aliconnolly/SWENG tree map/treemap.js"></script>
+  <link rel="stylesheet" href="<!doctype html>
+  <html>
+  <head>
+    <script src="https://cdn.anychart.com/js/7.13.1/anychart-bundle.min.js"></script>
+    <script src="/Users/aliconnolly/SWENG tree map/treemap.js"></script>
+    <link rel="stylesheet" href="https://cdn.anychart.com/css/7.13.1/anychart-ui.min.css" />
+    <style>
+      html, body, #container {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+      <div id="container"></div>
+      <script type="text/javascript">
+  anychart.onDocumentReady(function () {
+  
+      // The data used in this sample can be obtained from the CDN
+      // http://cdn.anychart.com/samples-data/tree-map-charts/us-population/data.js
+      // makes tree from the data for the sample
+      var data = anychart.data.tree(getData(), 'asTable');
+      chart = anychart.treeMap(data);
+  
+      // sets credits for this sample
+      chart.credits(true);
+      chart.credits().url('//en.wikipedia.org/wiki/List_of_United_States_cities_by_population');
+      chart.credits().text('Data source: en.wikipedia.org/wiki/List_of_United_States_cities_by_population');
+      chart.credits().logoSrc('//en.wikipedia.org/static/favicon/wikipedia.ico');
+  
+      // sets chart settings
+      chart.selectionMode('none');
+  
+      // sets title for chart and customizes it
+      chart.title().enabled(true).padding([0, 0, 20, 0]).useHtml(true).text(
+              'US population by Biggest Cities<br/>' +
+              '<span style="color:#212121; font-size: 13px;">According to en.wikipedia.org</span>'
+      );
+  
+      // sets settings for labels
+      chart.labels().fontColor('#212121').fontSize(12).useHtml(true).format(function () {
+          return this.getData('name') + '<br/><span style="font-size: 10px; font-weight: bold">' +
+                  parseFloat(this.value).toLocaleString() + '</span> ';
+      });
+  
+      // sets settings for tooltips
+      chart.tooltip().format(function () {
+          return parseFloat(this.value).toLocaleString() + ' people';
+      });
+  
+      // set colorScale with colors
+      chart.colorScale(anychart.scales.linearColor('#f1a122', '#a50b01'));
+  
+      // setting the number of levels shown
+      chart.hintDepth(1);
+  
+      // hintOpacity setting
+      chart.hintOpacity(0.8);
+  
+      // set container id for the chart
+      chart.container('container');
+  
+      // initiate chart drawing
+      chart.draw();
+  });
+      
+      </script>
+  </body>
+  </html>"
