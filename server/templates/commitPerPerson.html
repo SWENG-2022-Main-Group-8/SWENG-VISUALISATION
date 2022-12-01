@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Commits Per Person</title>
+    <style> 
+      .chartBox{
+        width: 700px;
+      }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.0.1/chart.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+
+    <h1 align="left", style="color:#ABB2B9 ">Commits Per Person </h1>
+    <div class="chartBox">
+      <canvas id="myChart"></canvas>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+      const ctx = document.getElementById('myChart');
+
+      const myChart = new Chart(ctx, {
+          data: {
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+            datasets: [{
+              type: 'line',
+              label: 'Alex',
+              data: [1, 4, 2, 7, 5, 8],
+              borderWidth: 2,
+            },
+            {
+              type: 'line',
+              label: 'Arshad',
+              data: [2, 6, 3, 1, 4, 6],
+              borderWidth: 2,
+            },
+            {
+              type: 'line',
+              label: 'Ammar',
+              data: [3, 1, 5, 2, 4, 7],
+              borderWidth: 2,
+            },
+            {
+              type: 'line',
+              label: 'Omaid',
+              data: [4, 1, 3, 5, 6, 3],
+              borderWidth: 2,
+            },
+            {
+              type: 'line',
+              label: 'Haoyu',
+              data: [2, 3, 6, 5, 5, 8],
+              borderWidth: 2,
+            },
+            {
+              type: 'line',
+              label: 'Kenneth',
+              data: [3, 2, 3, 7, 6, 2],
+              borderWidth: 2,
+            },
+            {
+              type: 'line',
+              label: 'Karthik',
+              data: [1,3, 6, 3, 4, 6],
+              borderWidth: 2,
+            },
+            {
+              type: 'line',
+              label: 'Zemyna',
+              data: [1, 3, 1, 5, 3, 7],
+              borderWidth: 2,
+            }]   
+        },
+        options: {
+          scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+      </script>
+  </body>
+</html>

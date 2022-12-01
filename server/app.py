@@ -11,6 +11,7 @@ from library import languageData as languagesAPI
 from library import commitData as commitAPI
 from library import org_maps as orgMapAPI
 from flask_cors import CORS
+from datetime import datetime, date, timedelta
 import json
 import os
 
@@ -25,7 +26,8 @@ client_secret = app.config.get("CLIENT_SECRET")
 
 async def get_user_commit_data(session, username, repo_name):
     commit_history_url = f'https://api.github.com/repos/{username}/{repo_name}/stats/participation'
-    commit_history = (await session.get(commit_history_url, auth=httpx.DigestAuth('access_token', current_session['access_token']))) # dont wait for the response of API
+    at = current_session['access_token']
+    commit_history = (await session.get(commit_history_url, auth=('access_token', at))) # dont wait for the response of API
     return commit_history.json()
 
 # function converted to coroutine
@@ -71,16 +73,8 @@ async def results_page():
         user_repos = requests.get(repos_url, auth=('access_token', current_session['access_token']))
         user_repos = user_repos.json()
 
+        #Get languages(bytes of code, number of times used)
         language_dict = {}
-        # Get languages(number of times used)
-        # for repo in user_repos:
-        #     if repo['language']:
-        #         if repo['language'] not in language_dict:
-        #             language_dict[repo['language']] = 1
-        #         else:
-        #             language_dict[repo['language']] = language_dict[repo['language']] + 1
-        # print(language_dict)
-        # Get languages(bytes of code, number of times used)
         linesOfCodeDict = {}
         languageCounterDict = {}
         for i in user_repos:
@@ -101,11 +95,83 @@ async def results_page():
                 except:
                     languageCounterDict[k] = 1
                     linesOfCodeDict[k] = v
-        # languageDict has language Keys, but will have modified values for languages, with the first value containing lines
-        # of code written for that language. Then seperated with a comma there is the amount of times this language was utilised by the user
-        # in all their public repos e.g. 'Java' : '5000,2'
         for k, v in linesOfCodeDict.items():
             language_dict[k] = "" + str(v) + "," + str(languageCounterDict[k])
+
+        #Get number of commits from past four weeks till today
+        commitDict = {}
+        contributionDict = {}
+        dateRequired = datetime.strptime(("25" + "/" + "10" + "/" + "2022"), '%d/%m/%Y')
+        # dateRequired1 = datetime.now().strftime('%d/%m/%Y')
+        # dateRequired = datetime.strptime(dateRequired1, '%d/%m/%Y')
+        weekBefore = dateRequired.date() - timedelta(days=7)
+        commitDict[weekBefore.strftime('%d/%m/%Y')] = 0
+        for i in range(3):
+            weekBefore = weekBefore - timedelta(days=7)
+            commitDict[weekBefore.strftime('%d/%m/%Y')] = 0
+
+        commitsInTotal = 0
+        for i in user_repos:
+            repo = i['name']
+            commitsByUser = 0
+            commitsInRepo = 0
+            try:
+                commits_url = f'https://api.github.com/repos/{username}/{repo}/commits?per_page=100'
+                response = (requests.get(commits_url, auth=('access_token', current_session['access_token'])))
+            except requests.exceptions.RequestException as e: continue
+            contributorData = json.loads(response.text)
+            for i in contributorData:
+                try:
+                    name = i['author']['login']
+                except: continue # for error of i['author']['login'] not existing in certain cases and giving None
+                if(name != username) :
+                    commitsInRepo = commitsInRepo + 1
+                    continue
+                commitsInRepo = commitsInRepo + 1
+                commitsByUser = commitsByUser + 1
+                commitsInTotal = commitsInTotal + 1
+                date = i['commit']['author']['date']
+                year = date[0:4]
+                month = date[5:7]
+                day = date[8:10]
+                currentDate = datetime.strptime((day + "/" + month + "/" + year), '%d/%m/%Y')
+                for k,v in commitDict.items():
+                    currentWeek = datetime.strptime(k, '%d/%m/%Y')
+                    weekAfter = currentWeek.date() + timedelta(days=7)
+                    if((currentDate.date() == dateRequired.date() and weekAfter == currentDate.date()) or currentWeek.date() <= currentDate.date() < weekAfter) :
+                        v = v + 1
+                        commitDict[k] = v
+            if(commitsInRepo == 0): continue
+            contribution = (commitsByUser/commitsInRepo) * 100
+            contributionDict[repo] = str(contribution) + "%"
+        print(contributionDict)
+
+        #Getting number of commits, insertions, deletions from repos
+        commitInsertionDeletionDict = {}
+        for i in user_repos:
+            repo = i['name']
+            commits = 0
+            insertions = 0
+            deletions = 0
+            # try:
+            insertions_url = "https://api.github.com/repos/{}/{}/stats/contributors".format(username, repo)
+            response = (requests.get(insertions_url, auth=('access_token', current_session['access_token'])))
+            # except requests.exceptions.RequestException as e: continue
+            stats = json.loads(response.text)
+            for stat in stats:
+                try:
+                    name = stat['author']['login']
+                except: continue # for error of i['author']['login'] not existing in certain cases and giving None
+                if name == username:
+                    commits = stat['total'];
+                    for ad in stat['weeks']:
+                        insertions = insertions + ad['a']
+                        deletions = deletions + ad['d']
+            if commits == 0 : continue
+            deletions = deletions * -1
+            commitInsertionDeletionDict[repo] = str(commits) + "," + str(insertions) + "," + str(deletions)
+        print(commitInsertionDeletionDict)
+
         #Get user events
         if 'username' not in request.args:
             events_url = f'https://api.github.com/users/{username}/events'
@@ -127,7 +193,8 @@ async def results_page():
         repo_commits_final.sort(key=lambda x: sum(x['commits']), reverse=True)
         
         try:
-            return render_template("results2.html", userData=userData, user_repos=user_repos, language_dict=language_dict, map_data=map_data, user_events=user_events, repo_commits=repo_commits_final)
+            return render_template("results2.html", userData=userData, user_repos=user_repos, language_dict=language_dict, map_data=map_data, user_events=user_events, repo_commits=repo_commits_final, commits_dict=commitDict, insertionDeletion_dict=commitInsertionDeletionDict, )
+
         except AttributeError:
             app.logger.debug('error getting username from github, whoops')
             return "I don't know who you are; I should, but regretfully I don't", 500
