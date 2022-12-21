@@ -20,9 +20,9 @@ app = Flask(__name__)
 env_config = os.getenv("APP_SETTINGS", "config.DevelopmentConfig")
 app.config.from_object(env_config)
 CORS(app)
-
 client_id = app.config.get("CLIENT_ID")
 client_secret = app.config.get("CLIENT_SECRET")
+app.secret_key = "super_duper_secret_key2"
 
 async def get_user_commit_data(session, username, repo_name):
     commit_history_url = f'https://api.github.com/repos/{username}/{repo_name}/stats/participation'
@@ -185,6 +185,7 @@ async def results_page():
         repo_commits_final = []
         repo_names = [repo['name'] for repo in user_repos]
         repo_commits = await get_user_commit_data_for_all_repos(username, repo_names)
+        print(repo_commits)
         for i in range(len(repo_commits)):
             if 'message' not in repo_commits[i]:
                 this_repos_commits = {'name': user_repos[i]['full_name'], 'commits': repo_commits[i]['owner']}
@@ -192,6 +193,7 @@ async def results_page():
         
         repo_commits_final.sort(key=lambda x: sum(x['commits']), reverse=True)
         
+
         try:
             return render_template("results2.html", userData=userData, user_repos=user_repos, language_dict=language_dict, map_data=map_data, user_events=user_events, repo_commits=repo_commits, commits_dict=commitDict, insertionDeletion_dict=commitInsertionDeletionDict)
 
@@ -285,11 +287,10 @@ def organisationMaps():
 
         mapOrg = received_data['data']
         mapOrgData = orgMapAPI.getOrgLocationData(mapOrg)
-        return flask.Response(response=json.dumps(mapOrgData), status=201)
-        
-if __name__ == "__main__":
-    app.secret_key = "super_duper_secret_key"
-    app.run(debug=True)
+        return flask.Response(response=json.dumps(mapOrgData), status=201)    
 
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT',5000))
+    app.run(host='0.0.0.0', port=port)
 
 #maps api key - AIzaSyCaN_NjULWKTMBVQYhQMCHoUIcJvg3fQUk
