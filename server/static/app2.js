@@ -1,4 +1,3 @@
-//Getting all the contributers for the React organisation
 async function getReactContributorData(){
     let url = "https://api.github.com/repos/facebook/react/contributors";
     let reactContrib = await getRequest(url)
@@ -6,14 +5,12 @@ async function getReactContributorData(){
     print(reactContrib)
 }
 
-//Gets the json 
 async function getRequest(url) {
     const response = await fetch(url);
     let data = await response.json();
     return data;
 }
 
-//Gets the data required for the map
 function fillMapData(mapData) {
     let bool1 = mapData.longitude;
     let bool2 = mapData.latitude;
@@ -32,7 +29,6 @@ function fillMapData(mapData) {
     }
 }
 
-//Gets the data for the languages graphs
 async function getLanguages(repo, user) {
     let label = [];
     let data = [];
@@ -78,7 +74,6 @@ function insertionDeletionChart(insertionDeletionData) {
     }
     draw4('insertionsDeletions', 'bar', 'line', 'Additions, Deletions and Commits of Repositories', label, commitsData, insertionsData, deletionsData, backgroundColor);
 }
-
 function languagesChart(language_info) {
     console.log(language_info)
     let label = [];
@@ -112,10 +107,9 @@ function commitsGraph(commitsData) {
         commits.push(commitsData[date]);
         backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
     }
-    draw3('commitBar', 'bar', 'commits', `Commit's in the past four weeks`, label, commits, backgroundColor);
+    draw3('commitBar', 'horizontalBar', 'commits', `Commit's in the past four weeks`, label, commits, backgroundColor);
 }
 
-//Creates the graph of top repos this year
 function fillCommitChart(commitData) {
     const data = commitData['commits'];
     console.log(data)
@@ -135,14 +129,13 @@ function fillCommitChart(commitData) {
                     fill: false,
                     borderColor: 'rgb(75, 192, 192)',
                     tension: 0.1
-                  }]
+                }]
             }
         }
     );
     
 }
 
-//Generate random colors for the graphs
 function generateColours(list) {
     let coloursList = []
     for (item in list) {
@@ -151,7 +144,7 @@ function generateColours(list) {
     return coloursList;
 }
 
-//Creates a pie chart for language used by the person (in bytes)
+
 function draw1(ctx, type, datasetLabel, titleText, label, data, backgroundColor) {
 
     let myChart = document.getElementById(ctx).getContext('2d');
@@ -198,7 +191,6 @@ function draw1(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
     });
 }
 
-//Creates the bar chart of number of repos that use a certain language
 function draw2(ctx, type, datasetLabel, titleText, label, data, backgroundColor) {
 
     let myChart = document.getElementById(ctx).getContext('2d');
@@ -402,14 +394,3 @@ var chart3 = null;
 var chart4 = null;
 var repoChart = null;
 
-//Hover effects for the menu page
-document.getElementById("homeCards").onmousemove = e => {
-    for(const card of document.getElementsByClassName("homeCard")){
-        const rect = card.getBoundingClientRect(),
-            x = e.clientX - rect.left,
-            y = e.clientY - rect.top;
-
-        card.style.setProperty("--mouse-x", `${x}px`)
-        card.style.setProperty("--mouse-y", `${y}px`)
-    }
-}
