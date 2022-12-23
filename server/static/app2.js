@@ -106,10 +106,12 @@ function commitsGraph(commitsData) {
     let label = [];
     let commits = [];
     let backgroundColor = [];
+    console.log(commitsData)
 
     for (let date in commitsData) {
         label.push(date);
         commits.push(commitsData[date]);
+        console.log(date +" " + commitsData[date])
         backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
     }
     draw3('commitBar', 'bar', 'commits', `Commit's in the past four weeks`, label, commits, backgroundColor);

@@ -110,6 +110,7 @@ async def results_page():
             weekBefore = weekBefore - timedelta(days=7)
             commitDict[weekBefore.strftime('%d/%m/%Y')] = 0
 
+        print(commitDict)
         commitsInTotal = 0
         for i in user_repos:
             repo = i['name']
@@ -144,7 +145,7 @@ async def results_page():
             if(commitsInRepo == 0): continue
             contribution = (commitsByUser/commitsInRepo) * 100
             contributionDict[repo] = str(contribution) + "%"
-        print(contributionDict)
+        print(commitDict)
 
         #Getting number of commits, insertions, deletions from repos
         commitInsertionDeletionDict = {}
@@ -167,10 +168,19 @@ async def results_page():
                     for ad in stat['weeks']:
                         insertions = insertions + ad['a']
                         deletions = deletions + ad['d']
+<<<<<<< Updated upstream
             if commits == 0 : continue
+=======
+            #         print(commits)
+            #         print(insertions)
+            #         print(deletions)
+            # print(str(insertions) + " " + str(deletions) + " " + str(commits))
+            # if commits == 0 : continue
+>>>>>>> Stashed changes
             deletions = deletions * -1
             commitInsertionDeletionDict[repo] = str(commits) + "," + str(insertions) + "," + str(deletions)
-        print(commitInsertionDeletionDict)
+        # print(commitInsertionDeletionDict)
+
 
         #Get user events
         if 'username' not in request.args:
@@ -180,6 +190,7 @@ async def results_page():
 
         #Get user location coords
         map_data = mapAPI.getLatLng(userData['location'])
+
 
         #Get user repos commit history
         repo_commits_final = []
@@ -200,7 +211,6 @@ async def results_page():
         except AttributeError:
             app.logger.debug('error getting username from github, whoops')
             return "I don't know who you are; I should, but regretfully I don't", 500
-
 
 @app.route('/map')
 def map_page():
@@ -250,7 +260,7 @@ def users():
             data = json.load(f)
             merge = dict(data.items() | languages.items() | commitHistory.items())
             return flask.jsonify(merge)
-            
+
     if request.method == "POST":
         received_data = request.get_json()
         print(f"received data: {received_data}")
