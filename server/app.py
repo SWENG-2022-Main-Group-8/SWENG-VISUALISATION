@@ -154,10 +154,12 @@ async def results_page():
             commits = 0
             insertions = 0
             deletions = 0
-            # try:
-            insertions_url = "https://api.github.com/repos/{}/{}/stats/contributors".format(username, repo)
-            response = (requests.get(insertions_url, auth=('access_token', current_session['access_token'])))
-            # except requests.exceptions.RequestException as e: continue
+            while True:
+             try:
+                insertions_url = "https://api.github.com/repos/{}/{}/stats/contributors".format(username, repo)
+                response = (requests.get(insertions_url, auth=('access_token', current_session['access_token'])))
+                break
+             except: print("error")
             stats = json.loads(response.text)
             for stat in stats:
                 try:
@@ -172,6 +174,7 @@ async def results_page():
             #         print(insertions)
             #         print(deletions)
             # print(str(insertions) + " " + str(deletions) + " " + str(commits))
+            if commits == 0 : continue
             deletions = deletions * -1
             commitInsertionDeletionDict[repo] = str(commits) + "," + str(insertions) + "," + str(deletions)
         # print(commitInsertionDeletionDict)
