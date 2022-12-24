@@ -60,12 +60,14 @@ async function getLanguages(repo, user) {
 
     draw1('language', 'pie', 'languages', `User's languages (in bytes)`, label, data, backgroundColor);
 }
-function insertionDeletionChart(insertionDeletionData) {
+function insertionDeletionChart(insertionDeletionData, insertionDeletion) {
     console.log(insertionDeletionData)
     let label = [];
-    let commitsData = []
-    let insertionsData = []
-    let deletionsData = []
+    let commitsData = [];
+    let insertionsData = [];
+    let deletionsData = [];
+    let maxInsertion = 0;
+    let maxDeletion = 0;
 
     let backgroundColor = [];
     for (let repo in insertionDeletionData) {
@@ -76,7 +78,12 @@ function insertionDeletionChart(insertionDeletionData) {
         label.push(repo);
         backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
     }
-    draw4('insertionsDeletions', 'bar', 'line', 'Additions, Deletions and Commits of Repositories', label, commitsData, insertionsData, deletionsData, backgroundColor);
+    for(let maxI in insertionDeletion) {
+        maxDeletion = insertionDeletion[maxI];
+        maxInsertion = maxI;
+    }
+    console.log(maxDeletion + " " + maxInsertion)
+    draw4('insertionsDeletions', 'bar', 'line', 'Additions, Deletions and Commits of Repositories', label, commitsData, insertionsData, deletionsData, backgroundColor, maxDeletion, maxInsertion);
 }
 
 function languagesChart(language_info) {
@@ -319,7 +326,7 @@ function draw3(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
 
     });
 }
-function draw4(ctx, type, type2, titleText, label, commits, insertions, deletions, backgroundColor) {
+function draw4(ctx, type, type2, titleText, label, commits, insertions, deletions, backgroundColor, min, max) {
 
     let myChart = document.getElementById(ctx).getContext('2d');
     chart4 = new Chart(myChart, {
@@ -373,14 +380,6 @@ function draw4(ctx, type, type2, titleText, label, commits, insertions, deletion
                     fontColor: '#000'
                 }
             },
-            // layout: {
-            //     padding: {
-            //         left: 50,
-            //         right: 0,
-            //         bottom: 0,
-            //         top: 0
-            //     }
-            // },
             tooltips: {
                 mode : 'index',
                 enabled: true,
@@ -392,7 +391,15 @@ function draw4(ctx, type, type2, titleText, label, commits, insertions, deletion
                     display: true,
                     position: 'left',
                     id: 'y-axis-1',
-                },{
+                    ticks: {
+                        // display: true,
+                        // stacked: true,
+                        // stepSize: 20,
+                        min: parseInt.min,
+                        max: parseInt.max,
+                    }
+                },
+                    {
                     type: 'linear',
                     display: true,
                     position: 'right',

@@ -149,6 +149,8 @@ async def results_page():
 
         #Getting number of commits, insertions, deletions from repos
         commitInsertionDeletionDict = {}
+        maxInsertions = 0
+        maxDeletions = 0
         for i in user_repos:
             repo = i['name']
             commits = 0
@@ -176,7 +178,16 @@ async def results_page():
             # print(str(insertions) + " " + str(deletions) + " " + str(commits))
             if commits == 0 : continue
             deletions = deletions * -1
+            if(insertions > maxInsertions):
+                maxInsertions = insertions
+            if(deletions < maxDeletions):
+                maxDeletions = deletions
             commitInsertionDeletionDict[repo] = str(commits) + "," + str(insertions) + "," + str(deletions)
+        insertionDeletion = {}
+        maxInsertions += 500
+        maxDeletions -= 300
+        insertionDeletion[maxInsertions] = maxDeletions
+        print(insertionDeletion)
         # print(commitInsertionDeletionDict)
 
 
@@ -204,7 +215,7 @@ async def results_page():
         
 
         try:
-            return render_template("results2.html", userData=userData, user_repos=user_repos, language_dict=language_dict, map_data=map_data, user_events=user_events, repo_commits=repo_commits_final, commits_dict=commitDict, insertionDeletion_dict=commitInsertionDeletionDict, )
+            return render_template("results2.html", userData=userData, user_repos=user_repos, language_dict=language_dict, map_data=map_data, user_events=user_events, repo_commits=repo_commits_final, commits_dict=commitDict, insertionDeletion_dict=commitInsertionDeletionDict, insertionDeletion = insertionDeletion, )
 
         except AttributeError:
             app.logger.debug('error getting username from github, whoops')
