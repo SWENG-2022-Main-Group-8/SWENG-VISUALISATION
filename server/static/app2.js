@@ -101,21 +101,10 @@ function commitsGraph(commitsData) {
     let label = [];
     let commits = [];
     let backgroundColor = [];
-    console.log(commitsData)
 
-    const orderedDates = {};
-    Object.keys(commitsData).sort(function(a, b) {
-        return a.split('/').reverse().join('').localeCompare(b.split('/').reverse().join(''));
-    }).forEach(function(key) {
-        orderedDates[key] = commitsData[key];
-    })
-
-    console.log(orderedDates);
-
-    for (let date in orderedDates) {
+    for (let date in commitsData) {
         label.push(date);
         commits.push(commitsData[date]);
-        console.log(date +" " + commitsData[date])
         backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
     }
     draw3('commitBar', 'horizontalBar', 'commits', `Commit's in the past four weeks`, label, commits, backgroundColor);

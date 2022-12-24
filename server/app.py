@@ -101,16 +101,15 @@ async def results_page():
         #Get number of commits from past four weeks till today
         commitDict = {}
         contributionDict = {}
-        # dateRequired = datetime.strptime(("25" + "/" + "10" + "/" + "2022"), '%d/%m/%Y')
-        dateRequired1 = datetime.now().strftime('%d/%m/%Y')
-        dateRequired = datetime.strptime(dateRequired1, '%d/%m/%Y')
+        dateRequired = datetime.strptime(("25" + "/" + "10" + "/" + "2022"), '%d/%m/%Y')
+        # dateRequired1 = datetime.now().strftime('%d/%m/%Y')
+        # dateRequired = datetime.strptime(dateRequired1, '%d/%m/%Y')
         weekBefore = dateRequired.date() - timedelta(days=7)
         commitDict[weekBefore.strftime('%d/%m/%Y')] = 0
         for i in range(3):
             weekBefore = weekBefore - timedelta(days=7)
             commitDict[weekBefore.strftime('%d/%m/%Y')] = 0
 
-        print(commitDict)
         commitsInTotal = 0
         for i in user_repos:
             repo = i['name']
@@ -145,7 +144,7 @@ async def results_page():
             if(commitsInRepo == 0): continue
             contribution = (commitsByUser/commitsInRepo) * 100
             contributionDict[repo] = str(contribution) + "%"
-        print(commitDict)
+        print(contributionDict)
 
         #Getting number of commits, insertions, deletions from repos
         commitInsertionDeletionDict = {}
@@ -154,12 +153,10 @@ async def results_page():
             commits = 0
             insertions = 0
             deletions = 0
-            while True:
-             try:
-                insertions_url = "https://api.github.com/repos/{}/{}/stats/contributors".format(username, repo)
-                response = (requests.get(insertions_url, auth=('access_token', current_session['access_token'])))
-                break
-             except: print("error")
+            # try:
+            insertions_url = "https://api.github.com/repos/{}/{}/stats/contributors".format(username, repo)
+            response = (requests.get(insertions_url, auth=('access_token', current_session['access_token'])))
+            # except requests.exceptions.RequestException as e: continue
             stats = json.loads(response.text)
             for stat in stats:
                 try:
@@ -170,15 +167,10 @@ async def results_page():
                     for ad in stat['weeks']:
                         insertions = insertions + ad['a']
                         deletions = deletions + ad['d']
-            #         print(commits)
-            #         print(insertions)
-            #         print(deletions)
-            # print(str(insertions) + " " + str(deletions) + " " + str(commits))
             if commits == 0 : continue
             deletions = deletions * -1
             commitInsertionDeletionDict[repo] = str(commits) + "," + str(insertions) + "," + str(deletions)
-        # print(commitInsertionDeletionDict)
-
+        print(commitInsertionDeletionDict)
 
         #Get user events
         if 'username' not in request.args:
@@ -188,7 +180,6 @@ async def results_page():
 
         #Get user location coords
         map_data = mapAPI.getLatLng(userData['location'])
-
 
         #Get user repos commit history
         repo_commits_final = []
@@ -204,11 +195,12 @@ async def results_page():
         
 
         try:
-            return render_template("results2.html", userData=userData, user_repos=user_repos, language_dict=language_dict, map_data=map_data, user_events=user_events, repo_commits=repo_commits_final, commits_dict=commitDict, insertionDeletion_dict=commitInsertionDeletionDict, )
+            return render_template("results2.html", userData=userData, user_repos=user_repos, language_dict=language_dict, map_data=map_data, user_events=user_events, repo_commits=repo_commits, commits_dict=commitDict, insertionDeletion_dict=commitInsertionDeletionDict)
 
         except AttributeError:
             app.logger.debug('error getting username from github, whoops')
             return "I don't know who you are; I should, but regretfully I don't", 500
+
 
 @app.route('/map')
 def map_page():
@@ -258,7 +250,7 @@ def users():
             data = json.load(f)
             merge = dict(data.items() | languages.items() | commitHistory.items())
             return flask.jsonify(merge)
-
+            
     if request.method == "POST":
         received_data = request.get_json()
         print(f"received data: {received_data}")
@@ -301,3 +293,4 @@ if __name__ == '__main__':
     port = int(os.environ.get('PORT',5000))
     app.run(host='0.0.0.0', port=port)
 
+#maps api key - AIzaSyCaN_NjULWKTMBVQYhQMCHoUIcJvg3fQUk
