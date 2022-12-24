@@ -101,9 +101,9 @@ async def results_page():
         #Get number of commits from past four weeks till today
         commitDict = {}
         contributionDict = {}
-        dateRequired = datetime.strptime(("25" + "/" + "10" + "/" + "2022"), '%d/%m/%Y')
-        # dateRequired1 = datetime.now().strftime('%d/%m/%Y')
-        # dateRequired = datetime.strptime(dateRequired1, '%d/%m/%Y')
+        # dateRequired = datetime.strptime(("25" + "/" + "10" + "/" + "2022"), '%d/%m/%Y')
+        dateRequired1 = datetime.now().strftime('%d/%m/%Y')
+        dateRequired = datetime.strptime(dateRequired1, '%d/%m/%Y')
         weekBefore = dateRequired.date() - timedelta(days=7)
         commitDict[weekBefore.strftime('%d/%m/%Y')] = 0
         for i in range(3):
@@ -151,6 +151,7 @@ async def results_page():
         commitInsertionDeletionDict = {}
         for i in user_repos:
             repo = i['name']
+            print(repo)
             commits = 0
             insertions = 0
             deletions = 0
@@ -163,20 +164,16 @@ async def results_page():
                 try:
                     name = stat['author']['login']
                 except: continue # for error of i['author']['login'] not existing in certain cases and giving None
+                print(name)
                 if name == username:
                     commits = stat['total'];
                     for ad in stat['weeks']:
                         insertions = insertions + ad['a']
                         deletions = deletions + ad['d']
-<<<<<<< Updated upstream
-            if commits == 0 : continue
-=======
-            #         print(commits)
-            #         print(insertions)
-            #         print(deletions)
-            # print(str(insertions) + " " + str(deletions) + " " + str(commits))
-            # if commits == 0 : continue
->>>>>>> Stashed changes
+                    print(commits)
+                    print(insertions)
+                    print(deletions)
+            print(str(insertions) + " " + str(deletions) + " " + str(commits))
             deletions = deletions * -1
             commitInsertionDeletionDict[repo] = str(commits) + "," + str(insertions) + "," + str(deletions)
         # print(commitInsertionDeletionDict)
@@ -206,7 +203,7 @@ async def results_page():
         
 
         try:
-            return render_template("results2.html", userData=userData, user_repos=user_repos, language_dict=language_dict, map_data=map_data, user_events=user_events, repo_commits=repo_commits, commits_dict=commitDict, insertionDeletion_dict=commitInsertionDeletionDict)
+            return render_template("results2.html", userData=userData, user_repos=user_repos, language_dict=language_dict, map_data=map_data, user_events=user_events, repo_commits=repo_commits_final, commits_dict=commitDict, insertionDeletion_dict=commitInsertionDeletionDict, )
 
         except AttributeError:
             app.logger.debug('error getting username from github, whoops')
@@ -303,4 +300,3 @@ if __name__ == '__main__':
     port = int(os.environ.get('PORT',5000))
     app.run(host='0.0.0.0', port=port)
 
-#maps api key - AIzaSyCaN_NjULWKTMBVQYhQMCHoUIcJvg3fQUk
