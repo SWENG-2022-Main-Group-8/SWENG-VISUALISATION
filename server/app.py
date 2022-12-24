@@ -151,7 +151,6 @@ async def results_page():
         commitInsertionDeletionDict = {}
         for i in user_repos:
             repo = i['name']
-            print(repo)
             commits = 0
             insertions = 0
             deletions = 0
@@ -164,16 +163,15 @@ async def results_page():
                 try:
                     name = stat['author']['login']
                 except: continue # for error of i['author']['login'] not existing in certain cases and giving None
-                print(name)
                 if name == username:
                     commits = stat['total'];
                     for ad in stat['weeks']:
                         insertions = insertions + ad['a']
                         deletions = deletions + ad['d']
-                    print(commits)
-                    print(insertions)
-                    print(deletions)
-            print(str(insertions) + " " + str(deletions) + " " + str(commits))
+            #         print(commits)
+            #         print(insertions)
+            #         print(deletions)
+            # print(str(insertions) + " " + str(deletions) + " " + str(commits))
             deletions = deletions * -1
             commitInsertionDeletionDict[repo] = str(commits) + "," + str(insertions) + "," + str(deletions)
         # print(commitInsertionDeletionDict)
