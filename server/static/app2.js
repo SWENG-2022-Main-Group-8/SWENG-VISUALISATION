@@ -108,7 +108,16 @@ function commitsGraph(commitsData) {
     let backgroundColor = [];
     console.log(commitsData)
 
-    for (let date in commitsData) {
+    const orderedDates = {};
+    Object.keys(commitsData).sort(function(a, b) {
+        return a.split('/').reverse().join('').localeCompare(b.split('/').reverse().join(''));
+    }).forEach(function(key) {
+        orderedDates[key] = commitsData[key];
+    })
+
+    console.log(orderedDates);
+
+    for (let date in orderedDates) {
         label.push(date);
         commits.push(commitsData[date]);
         console.log(date +" " + commitsData[date])
