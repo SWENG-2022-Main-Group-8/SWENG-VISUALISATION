@@ -290,7 +290,7 @@ function draw3(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
                 fontSize: 20
             },
             scales: {
-                yAxes: [{
+                xAxes: [{
                     ticks: {
                         beginAtZero: true
                     }

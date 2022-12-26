@@ -156,8 +156,8 @@ async def results_page():
             deletions = 0
             
             while True:
+                insertions_url = "https://api.github.com/repos/{}/{}/stats/contributors".format(username, repo)
                 try:
-                    insertions_url = "https://api.github.com/repos/{}/{}/stats/contributors".format(username, repo)
                     response = (requests.get(insertions_url, auth=('access_token', current_session['access_token'])))
                     break
                 except: print("error")
