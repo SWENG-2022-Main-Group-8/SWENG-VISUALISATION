@@ -63,9 +63,9 @@ async function getLanguages(repo, user) {
 function insertionDeletionChart(insertionDeletionData) {
     console.log(insertionDeletionData)
     let label = [];
-    let commitsData = []
-    let insertionsData = []
-    let deletionsData = []
+    let commitsData = [];
+    let insertionsData = [];
+    let deletionsData = [];
 
     let backgroundColor = [];
     for (let repo in insertionDeletionData) {
@@ -78,6 +78,7 @@ function insertionDeletionChart(insertionDeletionData) {
     }
     draw4('insertionsDeletions', 'bar', 'line', 'Additions, Deletions and Commits of Repositories', label, commitsData, insertionsData, deletionsData, backgroundColor);
 }
+
 function languagesChart(language_info) {
     console.log(language_info)
     let label = [];
@@ -99,6 +100,24 @@ function languagesChart(language_info) {
     draw1('languagePie', 'pie', 'languages', `User's languages (in bytes)`, label, bytes, backgroundColor);
 
     draw2('languageBar', 'bar', 'languages', `Number of repos that use the language`, label, repos, backgroundColor);
+}
+function contributionData(contributionDict) {
+    console.log(contributionDict)
+    let label = [];
+    let contributionPercent = [];
+    let totalCommits = [];
+    let backgroundColor = [];
+
+    for (let repo in contributionDict) {
+        const info = contributionDict[repo].split(',',2);
+        let percentageContribution = info[0];
+        let commitsTotal = info[1];
+
+        label.push(repo);
+        contributionPercent.push(percentageContribution);
+        totalCommits.push(commitsTotal);
+        backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
+    }
 }
 function commitsGraph(commitsData) {
     console.log(commitsData)
@@ -122,7 +141,7 @@ function commitsGraph(commitsData) {
         console.log(date +" " + commitsData[date])
         backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
     }
-    draw3('commitBar', 'horizontalBar', 'commits', `Commit's in the past four weeks`, label, commits, backgroundColor);
+    draw3('commitBar', 'bar', 'commits', `Commit's in the past four weeks`, label, commits, backgroundColor);
 }
 
 //Creates the graph of top repos this year
@@ -145,7 +164,7 @@ function fillCommitChart(commitData) {
                     fill: false,
                     borderColor: 'rgb(75, 192, 192)',
                     tension: 0.1
-                }]
+                  }]
             }
         }
     );
@@ -319,7 +338,6 @@ function draw3(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
     });
 }
 function draw4(ctx, type, type2, titleText, label, commits, insertions, deletions, backgroundColor) {
-
     let myChart = document.getElementById(ctx).getContext('2d');
     chart4 = new Chart(myChart, {
         type: type,
@@ -372,14 +390,6 @@ function draw4(ctx, type, type2, titleText, label, commits, insertions, deletion
                     fontColor: '#000'
                 }
             },
-            // layout: {
-            //     padding: {
-            //         left: 50,
-            //         right: 0,
-            //         bottom: 0,
-            //         top: 0
-            //     }
-            // },
             tooltips: {
                 mode : 'index',
                 enabled: true,
@@ -387,11 +397,19 @@ function draw4(ctx, type, type2, titleText, label, commits, insertions, deletion
             },
             scales: {
                 yAxes: [{
+                    ticks: {
+                        // display: true,
+                        // stacked: true,
+                        // stepSize: 20,
+                        // min: minimu,
+                        // max: maximu
+                    },
                     type: 'linear',
                     display: true,
                     position: 'left',
                     id: 'y-axis-1',
-                },{
+                },
+                    {
                     type: 'linear',
                     display: true,
                     position: 'right',
@@ -423,3 +441,4 @@ document.getElementById("homeCards").onmousemove = e => {
         card.style.setProperty("--mouse-y", `${y}px`)
     }
 }
+

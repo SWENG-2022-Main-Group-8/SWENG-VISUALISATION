@@ -215,6 +215,7 @@
                     </div>
                 </div>
             </div>
+{#            {% endif %}#}
 
             <!-- <div class="row justify-content-center" >
                 <div class="col-xl-10">
@@ -244,12 +245,14 @@
                 const languageData = {{language_dict|tojson|safe}};
                 const commitsData = {{commits_dict|tojson|safe}};
                 const insertionDeletionData = {{insertionDeletion_dict|tojson|safe}};
+                const contributionDict = {{contributionDict|tojson|safe}};
                 let first_repo_data = repo_commits_local[0]
                 console.log(repo_commits_local)
                 fillMapData(mapData)
                 commitsGraph(commitsData)
                 languagesChart(languageData)
                 insertionDeletionChart(insertionDeletionData)
+                contributionData(contributionDict)
                 fillCommitChart(first_repo_data)
             }
 

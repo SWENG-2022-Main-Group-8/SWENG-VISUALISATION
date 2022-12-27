@@ -144,11 +144,14 @@ async def results_page():
                         commitDict[k] = v
             if(commitsInRepo == 0): continue
             contribution = (commitsByUser/commitsInRepo) * 100
-            contributionDict[repo] = str(contribution) + "%"
-        print(commitDict)
+            contributionDict[repo] = str(round(contribution,2)) + "%," + str(commitsInRepo)
+        # print(commitDict)
+        print(contributionDict)
 
         #Getting number of commits, insertions, deletions from repos
         commitInsertionDeletionDict = {}
+        maxInsertions = 0
+        maxDeletions = 0
         for i in user_repos:
             repo = i['name']
             commits = 0
@@ -179,8 +182,11 @@ async def results_page():
             #print(str(insertions) + " " + str(deletions) + " " + str(commits))
             if commits == 0 : continue
             deletions = deletions * -1
+            if(insertions > maxInsertions):
+                maxInsertions = insertions
+            if(deletions < maxDeletions):
+                maxDeletions = deletions
             commitInsertionDeletionDict[repo] = str(commits) + "," + str(insertions) + "," + str(deletions)
-        #print(commitInsertionDeletionDict)
 
         #Get user events
         if 'username' not in request.args:
@@ -195,7 +201,6 @@ async def results_page():
         repo_commits_final = []
         repo_names = [repo['name'] for repo in user_repos]
         repo_commits = await get_user_commit_data_for_all_repos(username, repo_names)
-        print(repo_commits)
         for i in range(len(repo_commits)):
             if 'message' not in repo_commits[i]:
                 this_repos_commits = {'name': user_repos[i]['full_name'], 'commits': repo_commits[i]['owner']}
@@ -205,7 +210,7 @@ async def results_page():
         
 
         try:
-            return render_template("results2.html", userData=userData, user_repos=user_repos, language_dict=language_dict, map_data=map_data, user_events=user_events, repo_commits=repo_commits_final, commits_dict=commitDict, insertionDeletion_dict=commitInsertionDeletionDict, )
+            return render_template("results2.html", userData=userData, user_repos=user_repos, language_dict=language_dict, map_data=map_data, user_events=user_events, repo_commits=repo_commits_final, commits_dict=commitDict, insertionDeletion_dict=commitInsertionDeletionDict, contributionDict=contributionDict, )
 
         except AttributeError:
             app.logger.debug('error getting username from github, whoops')
