@@ -60,14 +60,12 @@ async function getLanguages(repo, user) {
 
     draw1('language', 'pie', 'languages', `User's languages (in bytes)`, label, data, backgroundColor);
 }
-function insertionDeletionChart(insertionDeletionData, insertionDeletion) {
+function insertionDeletionChart(insertionDeletionData) {
     console.log(insertionDeletionData)
     let label = [];
     let commitsData = [];
     let insertionsData = [];
     let deletionsData = [];
-    let maxInsertion = 0;
-    let maxDeletion = 0;
 
     let backgroundColor = [];
     for (let repo in insertionDeletionData) {
@@ -78,12 +76,7 @@ function insertionDeletionChart(insertionDeletionData, insertionDeletion) {
         label.push(repo);
         backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
     }
-    for(let maxI in insertionDeletion) {
-        maxDeletion = insertionDeletion[maxI];
-        maxInsertion = maxI;
-    }
-    console.log(maxDeletion + " " + maxInsertion)
-    draw4('insertionsDeletions', 'bar', 'line', 'Additions, Deletions and Commits of Repositories', label, commitsData, insertionsData, deletionsData, backgroundColor, maxDeletion, maxInsertion);
+    draw4('insertionsDeletions', 'bar', 'line', 'Additions, Deletions and Commits of Repositories', label, commitsData, insertionsData, deletionsData, backgroundColor);
 }
 
 function languagesChart(language_info) {
@@ -107,6 +100,24 @@ function languagesChart(language_info) {
     draw1('languagePie', 'pie', 'languages', `User's languages (in bytes)`, label, bytes, backgroundColor);
 
     draw2('languageBar', 'bar', 'languages', `Number of repos that use the language`, label, repos, backgroundColor);
+}
+function contributionData(contributionDict) {
+    console.log(contributionDict)
+    let label = [];
+    let contributionPercent = [];
+    let totalCommits = [];
+    let backgroundColor = [];
+
+    for (let repo in contributionDict) {
+        const info = contributionDict[repo].split(',',2);
+        let percentageContribution = info[0];
+        let commitsTotal = info[1];
+
+        label.push(repo);
+        contributionPercent.push(percentageContribution);
+        totalCommits.push(commitsTotal);
+        backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
+    }
 }
 function commitsGraph(commitsData) {
     console.log(commitsData)
@@ -326,8 +337,7 @@ function draw3(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
 
     });
 }
-function draw4(ctx, type, type2, titleText, label, commits, insertions, deletions, backgroundColor, min, max) {
-
+function draw4(ctx, type, type2, titleText, label, commits, insertions, deletions, backgroundColor) {
     let myChart = document.getElementById(ctx).getContext('2d');
     chart4 = new Chart(myChart, {
         type: type,
@@ -387,17 +397,17 @@ function draw4(ctx, type, type2, titleText, label, commits, insertions, deletion
             },
             scales: {
                 yAxes: [{
-                    type: 'linear',
-                    display: true,
-                    position: 'left',
-                    id: 'y-axis-1',
                     ticks: {
                         // display: true,
                         // stacked: true,
                         // stepSize: 20,
-                        min: parseInt.min,
-                        max: parseInt.max,
-                    }
+                        // min: minimu,
+                        // max: maximu
+                    },
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    id: 'y-axis-1',
                 },
                     {
                     type: 'linear',
