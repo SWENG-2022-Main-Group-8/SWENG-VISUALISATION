@@ -36,7 +36,30 @@
     box-sizing: border-box;
 }
 
-.img {
+.repoCards {
+    /* background-color: #28223f; */
+    background-color: #b9b9b5;
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+}
+
+.outer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.repoCards .repoCard {
+    background: #fff;
+    padding: 1.5rem;
+    max-width: 30rem;
+    border-radius: .5rem;
+    position: absolute;
+    pointer-events: none;
+}
+
+.profile .img {
     height: 50px;
     width: 50px;
     border-radius: 50%;
