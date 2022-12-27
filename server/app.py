@@ -101,7 +101,7 @@ async def results_page():
         #Get number of commits from past four weeks till today
         commitDict = {}
         contributionDict = {}
-        # dateRequired = datetime.strptime(("25" + "/" + "10" + "/" + "2022"), '%d/%m/%Y')
+        #dateRequired = datetime.strptime(("25" + "/" + "10" + "/" + "2022"), '%d/%m/%Y')
         dateRequired1 = datetime.now().strftime('%d/%m/%Y')
         dateRequired = datetime.strptime(dateRequired1, '%d/%m/%Y')
         weekBefore = dateRequired.date() - timedelta(days=7)
@@ -157,26 +157,29 @@ async def results_page():
             commits = 0
             insertions = 0
             deletions = 0
+            
             while True:
-             try:
                 insertions_url = "https://api.github.com/repos/{}/{}/stats/contributors".format(username, repo)
-                response = (requests.get(insertions_url, auth=('access_token', current_session['access_token'])))
-                break
-             except: print("error")
+                try:
+                    response = (requests.get(insertions_url, auth=('access_token', current_session['access_token'])))
+                    break
+                except: print("error")
+
             stats = json.loads(response.text)
             for stat in stats:
                 try:
                     name = stat['author']['login']
                 except: continue # for error of i['author']['login'] not existing in certain cases and giving None
+
                 if name == username:
                     commits = stat['total'];
                     for ad in stat['weeks']:
                         insertions = insertions + ad['a']
                         deletions = deletions + ad['d']
-            #         print(commits)
-            #         print(insertions)
-            #         print(deletions)
-            # print(str(insertions) + " " + str(deletions) + " " + str(commits))
+                    #print(commits)
+                    #print(insertions)
+                    #print(deletions)
+            #print(str(insertions) + " " + str(deletions) + " " + str(commits))
             if commits == 0 : continue
             deletions = deletions * -1
             if(insertions > maxInsertions):
@@ -184,13 +187,6 @@ async def results_page():
             if(deletions < maxDeletions):
                 maxDeletions = deletions
             commitInsertionDeletionDict[repo] = str(commits) + "," + str(insertions) + "," + str(deletions)
-        insertionDeletion = {}
-        maxInsertions += 500
-        maxDeletions -= 300
-        insertionDeletion[maxInsertions] = maxDeletions
-        print(insertionDeletion)
-        # print(commitInsertionDeletionDict)
-
 
         #Get user events
         if 'username' not in request.args:
@@ -200,7 +196,6 @@ async def results_page():
 
         #Get user location coords
         map_data = mapAPI.getLatLng(userData['location'])
-
 
         #Get user repos commit history
         repo_commits_final = []
@@ -220,6 +215,7 @@ async def results_page():
         except AttributeError:
             app.logger.debug('error getting username from github, whoops')
             return "I don't know who you are; I should, but regretfully I don't", 500
+
 
 @app.route('/map')
 def map_page():
@@ -269,7 +265,7 @@ def users():
             data = json.load(f)
             merge = dict(data.items() | languages.items() | commitHistory.items())
             return flask.jsonify(merge)
-
+            
     if request.method == "POST":
         received_data = request.get_json()
         print(f"received data: {received_data}")
@@ -311,4 +307,3 @@ def organisationMaps():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT',5000))
     app.run(host='0.0.0.0', port=port)
-

@@ -134,7 +134,7 @@ function commitsGraph(commitsData) {
     })
 
     console.log(orderedDates);
-
+    
     for (let date in orderedDates) {
         label.push(date);
         commits.push(commitsData[date]);
@@ -309,7 +309,7 @@ function draw3(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
                 fontSize: 20
             },
             scales: {
-                yAxes: [{
+                xAxes: [{
                     ticks: {
                         beginAtZero: true
                     }
@@ -441,3 +441,4 @@ document.getElementById("homeCards").onmousemove = e => {
         card.style.setProperty("--mouse-y", `${y}px`)
     }
 }
+

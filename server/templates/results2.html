@@ -68,9 +68,107 @@
             </div>
             <div class="row justify-content-center mt-3"> 
                 <div class="repo col-xl-3">
-                    <div class="repos-col">
-                        There will be a list of repos here
-                    </div>
+                    <!-- <div class="repos-col"> -->
+                        <div class="repoCards">
+                            <div class="outer">
+                                <div class="repoCard" style="--delay: -1;">
+                                    <div class="header">
+                                        <div class="profile">
+                                            <div class="img">
+                                                <img src="{{ userData.avatar_url }}" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="details">
+                                            <h6>{{ userData.login }}</h6>
+                                            <p>Repo goes here...</p>
+                                        </div>
+                                    </div>
+                                    <div class="statistics">
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                    </div>
+                                </div>
+
+                                <div class="repoCard" style="--delay: 0;">
+                                    <div class="header">
+                                        <div class="profile">
+                                            <div class="img">
+                                                <img src="{{ userData.avatar_url }}" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="details">
+                                            <h6>{{ userData.login }}</h6>
+                                            <p>Repo goes here...</p>
+                                        </div>
+                                    </div>
+                                    <div class="statistics">
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                    </div>
+                                </div>
+
+                                <div class="repoCard" style="--delay: 1;">
+                                    <div class="header">
+                                        <div class="profile">
+                                            <div class="img">
+                                                <img src="{{ userData.avatar_url }}" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="details">
+                                            <h6>{{ userData.login }}</h6>
+                                            <p>Repo goes here...</p>
+                                        </div>
+                                    </div>
+                                    <div class="statistics">
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                    </div>
+                                </div>
+
+                                <div class="repoCard" style="--delay: 2;">
+                                    <div class="header">
+                                        <div class="profile">
+                                            <div class="img">
+                                                <img src="{{ userData.avatar_url }}" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="details">
+                                            <h6>{{ userData.login }}</h6>
+                                            <p>Repo goes here...</p>
+                                        </div>
+                                    </div>
+                                    <div class="statistics">
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                    </div>
+                                </div>
+
+                                <div class="repoCard" style="--delay: 3;">
+                                    <div class="header">
+                                        <div class="profile">
+                                            <div class="img">
+                                                <img src="{{ userData.avatar_url }}" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="details">
+                                            <h6>{{ userData.login }}</h6>
+                                            <p>Repo goes here...</p>
+                                        </div>
+                                    </div>
+                                    <div class="statistics">
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    <!-- </div> -->
                 </div>
                 <div class="col-xl-8">
                     <div class="row justify-content-center">
@@ -88,31 +186,32 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    <div class="row justify-content-center mt-6 mb-4">
-                        <div class="mt-3 col-md-12">
-                            <div class="well">
-                                <canvas id="insertionsDeletions"></canvas>
-                            </div>
-                        </div>
+            <div class="row justify-content-center mt-6 mb-4">
+                <div class="mt-3 col-md-10">
+                    <div class="well">
+                        <canvas id="insertionsDeletions"></canvas>
                     </div>
-                    <div class="row justify-content-center mt-6 mb-4">
-                        <div class="mt-3 col-md-12">
-                            <div class="well">
-                                <h3>Weekly commits per repo</h3>
-                                <div class="repos-chart">
-                                    <canvas id="repo_commits"></canvas>
-                                </div>
-                                <select onchange="switchRepoChart()" id="repo_chart_selector" class="form-select" aria-label="Default select example">
-                                    {% for i in range(8) %}
-                                    {% if i == 0 %}
-                                    <option selected>{{repo_commits[1]['name']}}</option>
-                                    {% endif %}
-                                    <option value="{{repo_commits[i]['name']}}">{{repo_commits[i]['name']}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>    
+                </div>
+            </div>
+            <div class="row justify-content-center mt-6 mb-4">
+                <div class="mt-3 col-md-10">
+                    <div class="well">
+                        <h3>Weekly commits per repo</h3>
+                        <div class="repos-chart">
+                            <canvas id="repo_commits"></canvas>
+                        </div>
+                        <select onchange="switchRepoChart()" id="repo_chart_selector" class="form-select"
+                            aria-label="Default select example">
+                            {% for i in range(8) %}
+                            {% if i == 0 %}
+                            <option selected>{{repo_commits[1]['name']}}</option>
+                            {% endif %}
+                            <option value="{{repo_commits[i]['name']}}">{{repo_commits[i]['name']}}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
             </div>
