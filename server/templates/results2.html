@@ -68,9 +68,30 @@
             </div>
             <div class="row justify-content-center mt-3"> 
                 <div class="repo col-xl-3">
-                    <div class="repos-col">
-                        There will be a list of repos here
-                    </div>
+                    <!-- <div class="repos-col"> -->
+                        <div class="repoCards">
+                            <div class="outer">
+                                <div class="repoCard" style="--delay: -1;">
+                                    <div class="header">
+                                        <div class="profile">
+                                            <div class="img">
+                                                <img src="{{ userData.avatar_url }}" alt="">
+                                                <div class="details">
+                                                    <h4>{{ userData.login }}</h4>
+                                                    <p>this will be the repo name</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="statistics">
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                        <p>Lorem ipsum dolor sit amet.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <!-- </div> -->
                 </div>
                 <div class="col-xl-8">
                     <div class="row justify-content-center">

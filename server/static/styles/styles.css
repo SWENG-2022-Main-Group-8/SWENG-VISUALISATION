@@ -31,8 +31,17 @@
 }
 
 .repo{
-    width: 50%;
-    float: left;
-    padding: 20px;
-    border: 2px solid black;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.img {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    padding: 5px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
 }
