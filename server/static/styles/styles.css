@@ -57,9 +57,9 @@
     border-radius: .5rem;
     position: absolute;
     pointer-events: none;
-    opacity: 0;
+    /* opacity: 0;
     animation: animate 15s infinite linear;
-    animation-delay: calc(3s * var(--delay));
+    animation-delay: calc(3s * var(--delay)); */
 }
 
 .profile .header {
@@ -96,15 +96,15 @@
     margin-left: 15px;
 }
 
-.outer:hover .repoCard{
+/* .outer:hover .repoCard{
     animation-play-state: paused;
 }
 
 .repoCards .repoCard:last-child{
     animation-delay: calc(-3s * var(--delay));
-}
+} */
 
-@keyframes animate{
+/* @keyframes animate{
     0% {
         opacity: 0;
         transform: translateY(100%) scale(0.5);
@@ -137,4 +137,4 @@
         font-size: 10px;
         padding: .25rem!important;
     }
-}
+} */

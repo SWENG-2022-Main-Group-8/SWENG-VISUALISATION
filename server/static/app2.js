@@ -113,10 +113,14 @@ function contributionData(contributionDict) {
         let percentageContribution = info[0];
         let commitsTotal = info[1];
 
-        label.push(repo);
-        contributionPercent.push(percentageContribution);
-        totalCommits.push(commitsTotal);
-        backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
+        // create repoCard div
+        let card = document.createElement("div");
+        card.classList.add("repoCard");
+
+        // label.push(repo);
+        // contributionPercent.push(percentageContribution);
+        // totalCommits.push(commitsTotal);
+        // backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
     }
 }
 function commitsGraph(commitsData) {
@@ -141,7 +145,7 @@ function commitsGraph(commitsData) {
         console.log(date +" " + commitsData[date])
         backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
     }
-    draw3('commitBar', 'bar', 'commits', `Commit's in the past four weeks`, label, commits, backgroundColor);
+    draw3('commitBar', 'horizontalBar', 'commits', `Commit's in the past four weeks`, label, commits, backgroundColor);
 }
 
 //Creates the graph of top repos this year
