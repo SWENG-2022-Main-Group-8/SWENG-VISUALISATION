@@ -122,6 +122,31 @@ function contributionData(gitName, gitImgUrl, contDict) {
         // create header div and add to repoCard
         let headerInfo = document.createElement("div");
         headerInfo.classList.add("header");
+
+        let profileInfo = document.createElement("div");
+        profileInfo.classList.add("profile");
+        
+        let userImgDiv = document.createElement("div");
+        userImgDiv.classList.add("img")
+
+        let actualImg = document.createElement("img");
+        actualImg.src = `${gitImgUrl}`;
+        userImgDiv.appendChild(actualImg);
+        profileInfo.appendChild(userImgDiv);
+        headerInfo.appendChild(profileInfo);
+
+        let userDetails = document.createElement("div");
+        userDetails.classList.add("details");
+
+        let usersName = document.createElement("h6");
+        usersName.innerHTML = `<b> ${gitName} </b>`;
+        userDetails.appendChild(usersName);
+
+        let currentRepo = document.createElement("p");
+        currentRepo.innerHTML = `<b>Repository: </b> ${repo}`;
+        userDetails.appendChild(currentRepo);
+
+        headerInfo.appendChild(userDetails);
         card.appendChild(headerInfo);
 
         // create statistics div and add to repoCard
@@ -133,9 +158,8 @@ function contributionData(gitName, gitImgUrl, contDict) {
 
         let actualLink = document.createElement("a");
         actualLink.href = `https://github.com/${gitName}/${repo}`;
-        actualLink.innerHTML = `Click here for repo`;
+        actualLink.innerHTML = `Click here`;
         repoLink.appendChild(actualLink);
-        
         stats.appendChild(repoLink);
 
         let contPercent = document.createElement("p");
@@ -145,12 +169,12 @@ function contributionData(gitName, gitImgUrl, contDict) {
         let tCommits = document.createElement("p");
         tCommits.innerHTML = `<b>Total Commits: </b> ${commitsTotal}`;
         stats.appendChild(tCommits);
-
         card.appendChild(stats);
 
         document.querySelector(".outer").appendChild(card);
     }
 }
+
 function commitsGraph(commitsData) {
     console.log(commitsData)
     let label = [];
