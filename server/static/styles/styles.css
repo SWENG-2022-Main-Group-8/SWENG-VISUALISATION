@@ -37,7 +37,6 @@
 }
 
 .repoCards {
-    /* background-color: #28223f; */
     background-color: #b9b9b5;
     display: grid;
     place-items: center;
@@ -57,9 +56,6 @@
     border-radius: .5rem;
     position: absolute;
     pointer-events: none;
-    /* opacity: 0;
-    animation: animate 15s infinite linear;
-    animation-delay: calc(3s * var(--delay)); */
 }
 
 .profile .header {
@@ -95,46 +91,3 @@
 .details{
     margin-left: 15px;
 }
-
-/* .outer:hover .repoCard{
-    animation-play-state: paused;
-}
-
-.repoCards .repoCard:last-child{
-    animation-delay: calc(-3s * var(--delay));
-} */
-
-/* @keyframes animate{
-    0% {
-        opacity: 0;
-        transform: translateY(100%) scale(0.5);
-    }
-
-    5%, 20% {
-        opacity: 0.4;
-        transform: translateY(100%) scale(0.7);
-    }
-
-    25%, 40% {
-        opacity: 1;
-        pointer-events: all;
-        transform: translateY(0%) scale(1);
-    }
-
-    45%, 60% {
-        opacity: 0.4;
-        transform: translateY(-100%) scale(0.7);
-    }
-
-    65%, 100% {
-        opacity: 0;
-        transform: translateY(-100%) scale(0.5);
-    }
-}
-
-@media (max-width:467px) {
-    .repoCard{
-        font-size: 10px;
-        padding: .25rem!important;
-    }
-} */

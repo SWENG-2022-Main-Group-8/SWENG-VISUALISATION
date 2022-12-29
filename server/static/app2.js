@@ -101,15 +101,17 @@ function languagesChart(language_info) {
 
     draw2('languageBar', 'bar', 'languages', `Number of repos that use the language`, label, repos, backgroundColor);
 }
-function contributionData(contributionDict) {
-    console.log(contributionDict)
+function contributionData(gitName, gitImgUrl, contDict) {
+    console.log(contDict)
+    console.log(gitName)
+    console.log(gitImgUrl)
     let label = [];
     let contributionPercent = [];
     let totalCommits = [];
     let backgroundColor = [];
 
-    for (let repo in contributionDict) {
-        const info = contributionDict[repo].split(',',2);
+    for (let repo in contDict) {
+        const info = contDict[repo].split(',',2);
         let percentageContribution = info[0];
         let commitsTotal = info[1];
 
@@ -117,10 +119,36 @@ function contributionData(contributionDict) {
         let card = document.createElement("div");
         card.classList.add("repoCard");
 
-        // label.push(repo);
-        // contributionPercent.push(percentageContribution);
-        // totalCommits.push(commitsTotal);
-        // backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
+        // create header div and add to repoCard
+        let headerInfo = document.createElement("div");
+        headerInfo.classList.add("header");
+        card.appendChild(headerInfo);
+
+        // create statistics div and add to repoCard
+        let stats = document.createElement("div");
+        stats.classList.add("statistics");
+
+        let repoLink = document.createElement("p");
+        repoLink.innerHTML = `<b>Link: </b>`;
+
+        let actualLink = document.createElement("a");
+        actualLink.href = `https://github.com/${gitName}/${repo}`;
+        actualLink.innerHTML = `Click here for repo`;
+        repoLink.appendChild(actualLink);
+        
+        stats.appendChild(repoLink);
+
+        let contPercent = document.createElement("p");
+        contPercent.innerHTML = `<b>Contribution Percentage: </b> ${percentageContribution}`;
+        stats.appendChild(contPercent);
+
+        let tCommits = document.createElement("p");
+        tCommits.innerHTML = `<b>Total Commits: </b> ${commitsTotal}`;
+        stats.appendChild(tCommits);
+
+        card.appendChild(stats);
+
+        document.querySelector(".outer").appendChild(card);
     }
 }
 function commitsGraph(commitsData) {

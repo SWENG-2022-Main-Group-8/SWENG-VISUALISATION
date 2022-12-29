@@ -144,19 +144,25 @@
         <script>
             const repo_commits_local = {{repo_commits|tojson|safe}};
             function fill_data() {
+                const testing = {{ userData| tojson | safe}};
                 const mapData = {{map_data|tojson|safe}};
                 console.log(mapData)
                 const languageData = {{language_dict|tojson|safe}};
                 const commitsData = {{commits_dict|tojson|safe}};
                 const insertionDeletionData = {{insertionDeletion_dict|tojson|safe}};
-                const contributionDict = {{contributionDict|tojson|safe}};
+                const contDict = {{contributionDict|tojson|safe}};
+                
+                const gitName = testing.login;
+                console.log(gitName)
+                const gitImgUrl = testing.avatar_url;
+                console.log(gitImgUrl)
                 let first_repo_data = repo_commits_local[0]
                 console.log(repo_commits_local)
                 fillMapData(mapData)
                 commitsGraph(commitsData)
                 languagesChart(languageData)
                 insertionDeletionChart(insertionDeletionData)
-                contributionData(contributionDict)
+                contributionData(gitName, gitImgUrl, contDict)
                 fillCommitChart(first_repo_data)
             }
 
