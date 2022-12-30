@@ -102,13 +102,6 @@ function languagesChart(language_info) {
     draw2('languageBar', 'bar', 'languages', `Number of repos that use the language`, label, repos, backgroundColor);
 }
 function contributionData(gitName, gitImgUrl, contDict) {
-    console.log(contDict)
-    console.log(gitName)
-    console.log(gitImgUrl)
-    let label = [];
-    let contributionPercent = [];
-    let totalCommits = [];
-    let backgroundColor = [];
 
     for (let repo in contDict) {
         const info = contDict[repo].split(',',2);

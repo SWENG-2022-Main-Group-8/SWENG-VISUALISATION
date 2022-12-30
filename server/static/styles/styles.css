@@ -32,30 +32,38 @@
 
 .repo{
     margin: 0;
+    margin-top: 20px;
+    margin-bottom: 5px;
     padding: 0;
     box-sizing: border-box;
+    text-align: left;
 }
 
 .repoCards {
-    background-color: #b9b9b5;
+    background-color: #fff;
     display: grid;
     place-items: center;
-    min-height: 160vh;
+    min-height: 140vh;
 }
 
 .outer {
-    display: flex;
+    display: block;
     align-items: center;
     justify-content: center;
+    height: 150vh;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 .repoCards .repoCard {
     background: #fff;
     padding: 1.5rem;
-    width: 90%;
+    width: 100%;
     border-radius: .5rem;
-    position: absolute;
-    pointer-events: none;
+    position: block;
+    border: 1px solid black;
+    margin-bottom: 20px;
 }
 
 .profile .header {
@@ -90,4 +98,4 @@
 
 .details{
     margin-left: 15px;
-}
+} 
