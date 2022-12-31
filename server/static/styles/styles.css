@@ -50,10 +50,15 @@
     display: block;
     align-items: center;
     justify-content: center;
-    height: 150vh;
+    height: 140vh;
     width: 100%;
     overflow-x: hidden;
     overflow-y: scroll;
+    -ms-overflow-style: none;
+}
+
+.outer::-webkit-scrollbar {
+    display: none;
 }
 
 .repoCards .repoCard {
@@ -63,7 +68,7 @@
     border-radius: .5rem;
     position: block;
     border: 1px solid black;
-    margin-bottom: 20px;
+    margin: 10px 0;
 }
 
 .profile .header {
@@ -99,3 +104,8 @@
 .details{
     margin-left: 15px;
 } 
+
+.scroller{
+    margin: 5px 0;
+    width: 100%;
+}

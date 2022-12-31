@@ -491,3 +491,18 @@ document.getElementById("homeCards").onmousemove = e => {
     }
 }
 
+function addScrollButtons() {
+    const outer = document.querySelector(".outer");
+    const scrollUpButton = document.querySelector("#scroll-up");
+    const scrollDownButton = document.querySelector("#scroll-down");
+
+    scrollUpButton.addEventListener("click", () => {
+      outer.scrollTop -= 250; // scroll up by 50 pixels
+    });
+
+    scrollDownButton.addEventListener("click", () => {
+      outer.scrollTop += 250; // scroll down by 50 pixels
+    });
+}
+
+

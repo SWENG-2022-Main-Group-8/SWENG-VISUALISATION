@@ -70,9 +70,11 @@
                 <div class="repo col-xl-3">
                     <h4>Repositories</h4>
                     <div class="repoCards">
+                        <button class="scroller" id="scroll-up">Scroll Up</button>
                         <div class="outer">
                             <!-- function call places the cards here -->
                         </div>
+                        <button class="scroller" id="scroll-down">Scroll Down</button>
                     </div>
                 </div>
                 <div class="col-xl-8">
@@ -165,6 +167,7 @@
                 insertionDeletionChart(insertionDeletionData)
                 contributionData(gitName, gitImgUrl, contDict)
                 fillCommitChart(first_repo_data)
+                addScrollButtons()
             }
 
             function switchRepoChart() {
