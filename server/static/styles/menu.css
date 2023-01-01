@@ -7,6 +7,7 @@
     font-family:'Courier New', Courier, monospace;
     background-color: var(--bg-color);
     font-size: medium;
+
     align-items: center;
     display: flex;
     height: 100vh;
@@ -16,8 +17,8 @@
     padding: 0px;
 }
 
-#homeCards {
-    display: flex;
+#homeCards{
+    display:flex;
     flex-wrap: wrap;
     gap: 10px;
     max-width: 916px;
@@ -28,8 +29,8 @@
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     cursor: pointer;
-    height: 250px;
-    width: 441px;
+    height: 260px;
+    width: 451px;
     position: relative;
 }
 
@@ -37,12 +38,11 @@
     opacity: 1;
 }
 
-#homeCards:hover>.homeCard>.homeCard-border {
-    opacity: 1;
+#homeCards:hover > .homeCard > .homeCard-border{
+    opacity:1;
 }
 
-.homeCard::before,
-.homeCard>.homeCard-border {
+.homeCard::before, .homeCard > .homeCard-border {
     opacity: 0;
     transition: opacity 500ms;
     border-radius: inherit;
@@ -82,8 +82,7 @@
     text-align: center;
 }
 
-.homeCardTitle {
-    font-weight: lighter;
+.homeCardTitle{
     position: absolute;
     width: 100%;
     bottom: 0;

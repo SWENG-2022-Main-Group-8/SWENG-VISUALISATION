@@ -1,4 +1,3 @@
-//Getting all the contributers for the React organisation
 async function getReactContributorData(){
     let url = "https://api.github.com/repos/facebook/react/contributors";
     let reactContrib = await getRequest(url)
@@ -6,14 +5,12 @@ async function getReactContributorData(){
     print(reactContrib)
 }
 
-//Gets the json 
 async function getRequest(url) {
     const response = await fetch(url);
     let data = await response.json();
     return data;
 }
 
-//Gets the data required for the map
 function fillMapData(mapData) {
     let bool1 = mapData.longitude;
     let bool2 = mapData.latitude;
@@ -32,7 +29,6 @@ function fillMapData(mapData) {
     }
 }
 
-//Gets the data for the languages graphs
 async function getLanguages(repo, user) {
     let label = [];
     let data = [];
@@ -193,7 +189,6 @@ function commitsGraph(commitsData) {
     draw3('commitBar', 'horizontalBar', 'commits', `Commit's in the past four weeks`, label, commits, backgroundColor);
 }
 
-//Creates the graph of top repos this year
 function fillCommitChart(commitData) {
     const data = commitData['commits'];
     console.log(data)
@@ -220,7 +215,6 @@ function fillCommitChart(commitData) {
     
 }
 
-//Generate random colors for the graphs
 function generateColours(list) {
     let coloursList = []
     for (item in list) {
@@ -229,7 +223,7 @@ function generateColours(list) {
     return coloursList;
 }
 
-//Creates a pie chart for language used by the person (in bytes)
+
 function draw1(ctx, type, datasetLabel, titleText, label, data, backgroundColor) {
 
     let myChart = document.getElementById(ctx).getContext('2d');
@@ -276,7 +270,6 @@ function draw1(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
     });
 }
 
-//Creates the bar chart of number of repos that use a certain language
 function draw2(ctx, type, datasetLabel, titleText, label, data, backgroundColor) {
 
     let myChart = document.getElementById(ctx).getContext('2d');
@@ -504,5 +497,3 @@ function addScrollButtons() {
       outer.scrollTop += 250; // scroll down by 50 pixels
     });
 }
-
-
