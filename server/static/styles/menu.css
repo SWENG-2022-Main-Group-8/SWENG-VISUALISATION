@@ -1,9 +1,13 @@
-body {
-    background-color: #1E1E1E;
-    color: #F0F0F0;
+:root {
+    --bg-color: rgb(20, 20, 20);
+    --card-color: rgb(23, 23, 23);
 }
 
-.homepage{
+.homepage {
+    font-family:'Courier New', Courier, monospace;
+    background-color: var(--bg-color);
+    font-size: medium;
+
     align-items: center;
     display: flex;
     height: 100vh;
@@ -21,7 +25,7 @@ body {
     width: calc(100% - 20px);
 }
 
-.homeCard{
+.homeCard {
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     cursor: pointer;
@@ -51,26 +55,24 @@ body {
     z-index: 2;
 }
 
-.homeCard::before{
+.homeCard::before {
     background: radial-gradient(
         800px circle at var(--mouse-x) var(--mouse-y),
         rgba(255, 255, 255, 0.06),
-        transparent 40%
-    );
+        transparent 40%);
     z-index: 3;
 }
 
-.homeCard > .homeCard-border {
+.homeCard>.homeCard-border {
     background: radial-gradient(
         800px circle at var(--mouse-x) var(--mouse-y),
         rgba(255, 255, 255, 0.3),
-        transparent 40%
-    );
+        transparent 40%);
     z-index: 1;
 }
 
-.homeCard > .homeCard-content {
-    background-color: var(--homeCard-color);
+.homeCard>.homeCard-content {
+    background-color: var(--card-color);
     border-radius: inherit;
     inset: 1px;
     height: calc(100% - 2px);
@@ -83,12 +85,14 @@ body {
 .homeCardTitle{
     position: absolute;
     width: 100%;
-    bottom:0;
+    bottom: 0;
     color: white;
+    text-shadow: 1px 1px 2px black;
 }
 
-.fa{
+.fa {
     color: white;
     font-size: 500%;
     padding-top: 50px;
+    text-shadow: 1px 1px 2px black;
 }

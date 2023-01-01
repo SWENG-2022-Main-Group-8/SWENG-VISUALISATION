@@ -1,3 +1,7 @@
+:root {
+    --bg-color: rgb(20, 20, 20);
+}
+
 .event {
     margin-bottom: 5px;
     font-size: medium;
@@ -5,6 +9,8 @@
 
 .loginpage{
     background-color: var(--bg-color);
+    font-family:'Courier New', Courier, monospace;
+    color: white;
     height: 100vh;
     margin: 0px;
     overflow: hidden;
@@ -16,15 +22,103 @@
     width: 50%;
 }
 
-.searchbar{
-    float: right;
-}
-
 .gradient-bg {
-    background-image: linear-gradient(to right top, #3a2450, #44255f, #4e266f, #5a267e, #66248d, #67208e, #671c8f, #681790, #5c1184, #500a77, #45046b, #3a005f);
+    background-image: linear-gradient(to right top, rgba(20, 20, 20, 0.75), rgba(20, 20, 20, 0.75));
 }
 
 .mt-6 {
     margin-top: 7rem;
 }
 
+.repo{
+    margin: 0;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    padding: 0;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 16px;
+}
+
+.repoCards {
+    background-color: #fff;
+    display: grid;
+    place-items: center;
+    min-height: 140vh;
+    text-align: left;
+}
+
+.outer {
+    display: block;
+    align-items: center;
+    justify-content: center;
+    height: 140vh;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+}
+
+.outer::-webkit-scrollbar {
+    display: none;
+}
+
+.repoCards .repoCard {
+    background: #fff;
+    padding: 1.5rem;
+    width: 100%;
+    border-radius: .5rem;
+    position: block;
+    border: 1px solid black;
+    margin: 10px 0;
+}
+
+.profile .header {
+    display: flex;
+    align-items: center;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+}
+
+.profile {
+    margin-bottom: 1rem;
+}
+
+.profile .img {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    padding: 5px;
+    background: #fff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
+}
+
+.profile .img img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.details{
+    margin-left: 15px;
+} 
+
+.scroller{
+    margin: 5px 0;
+    width: 100%;
+    font-size: 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    background-color: rgba(20, 20, 20, 0.75);
+    color: white;
+    border: none;
+}
+
+.weeklyRepo{
+    text-align: center;
+    font-size: 16px;
+}
