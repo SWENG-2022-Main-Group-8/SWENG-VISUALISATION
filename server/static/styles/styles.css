@@ -1,3 +1,7 @@
+:root {
+    --bg-color: rgb(20, 20, 20);
+}
+
 .event {
     margin-bottom: 5px;
     font-size: medium;
@@ -6,7 +10,7 @@
 .loginpage{
     background-color: var(--bg-color);
     font-family:'Courier New', Courier, monospace;
-    color:#ecede8;
+    color: white;
     height: 100vh;
     margin: 0px;
     overflow: hidden;
