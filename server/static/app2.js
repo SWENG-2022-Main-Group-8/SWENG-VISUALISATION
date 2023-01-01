@@ -63,9 +63,9 @@ async function getLanguages(repo, user) {
 function insertionDeletionChart(insertionDeletionData) {
     console.log(insertionDeletionData)
     let label = [];
-    let commitsData = []
-    let insertionsData = []
-    let deletionsData = []
+    let commitsData = [];
+    let insertionsData = [];
+    let deletionsData = [];
 
     let backgroundColor = [];
     for (let repo in insertionDeletionData) {
@@ -101,6 +101,73 @@ function languagesChart(language_info) {
 
     draw2('languageBar', 'bar', 'languages', `Number of repos that use the language`, label, repos, backgroundColor);
 }
+function contributionData(gitName, gitImgUrl, contDict) {
+
+    for (let repo in contDict) {
+        const info = contDict[repo].split(',',2);
+        let percentageContribution = info[0];
+        let commitsTotal = info[1];
+
+        // create repoCard div
+        let card = document.createElement("div");
+        card.classList.add("repoCard");
+
+        // create header div and add to repoCard
+        let headerInfo = document.createElement("div");
+        headerInfo.classList.add("header");
+
+        let profileInfo = document.createElement("div");
+        profileInfo.classList.add("profile");
+        
+        let userImgDiv = document.createElement("div");
+        userImgDiv.classList.add("img")
+
+        let actualImg = document.createElement("img");
+        actualImg.src = `${gitImgUrl}`;
+        userImgDiv.appendChild(actualImg);
+        profileInfo.appendChild(userImgDiv);
+        headerInfo.appendChild(profileInfo);
+
+        let userDetails = document.createElement("div");
+        userDetails.classList.add("details");
+
+        let usersName = document.createElement("h6");
+        usersName.innerHTML = `<b> ${gitName} </b>`;
+        userDetails.appendChild(usersName);
+
+        let currentRepo = document.createElement("p");
+        currentRepo.innerHTML = `<b>Repository: </b> ${repo}`;
+        userDetails.appendChild(currentRepo);
+
+        headerInfo.appendChild(userDetails);
+        card.appendChild(headerInfo);
+
+        // create statistics div and add to repoCard
+        let stats = document.createElement("div");
+        stats.classList.add("statistics");
+
+        let repoLink = document.createElement("p");
+        repoLink.innerHTML = `<b>Link: </b>`;
+
+        let actualLink = document.createElement("a");
+        actualLink.href = `https://github.com/${gitName}/${repo}`;
+        actualLink.innerHTML = `Click here`;
+        repoLink.appendChild(actualLink);
+        stats.appendChild(repoLink);
+
+        let contPercent = document.createElement("p");
+        contPercent.innerHTML = `<b>Contribution Percentage: </b> ${percentageContribution}`;
+        stats.appendChild(contPercent);
+
+        let tCommits = document.createElement("p");
+        tCommits.innerHTML = `<b>Total Commits: </b> ${commitsTotal}`;
+        stats.appendChild(tCommits);
+        card.appendChild(stats);
+
+        document.querySelector(".outer").appendChild(card);
+    }
+}
+
 function commitsGraph(commitsData) {
     console.log(commitsData)
     let label = [];
@@ -108,13 +175,22 @@ function commitsGraph(commitsData) {
     let backgroundColor = [];
     console.log(commitsData)
 
-    for (let date in commitsData) {
+    const orderedDates = {};
+    Object.keys(commitsData).sort(function(a, b) {
+        return a.split('/').reverse().join('').localeCompare(b.split('/').reverse().join(''));
+    }).forEach(function(key) {
+        orderedDates[key] = commitsData[key];
+    })
+
+    console.log(orderedDates);
+    
+    for (let date in orderedDates) {
         label.push(date);
         commits.push(commitsData[date]);
         console.log(date +" " + commitsData[date])
         backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
     }
-    draw3('commitBar', 'bar', 'commits', `Commit's in the past four weeks`, label, commits, backgroundColor);
+    draw3('commitBar', 'horizontalBar', 'commits', `Commit's in the past four weeks`, label, commits, backgroundColor);
 }
 
 //Creates the graph of top repos this year
@@ -282,7 +358,7 @@ function draw3(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
                 fontSize: 20
             },
             scales: {
-                yAxes: [{
+                xAxes: [{
                     ticks: {
                         beginAtZero: true
                     }
@@ -311,7 +387,6 @@ function draw3(ctx, type, datasetLabel, titleText, label, data, backgroundColor)
     });
 }
 function draw4(ctx, type, type2, titleText, label, commits, insertions, deletions, backgroundColor) {
-
     let myChart = document.getElementById(ctx).getContext('2d');
     chart4 = new Chart(myChart, {
         type: type,
@@ -364,14 +439,6 @@ function draw4(ctx, type, type2, titleText, label, commits, insertions, deletion
                     fontColor: '#000'
                 }
             },
-            // layout: {
-            //     padding: {
-            //         left: 50,
-            //         right: 0,
-            //         bottom: 0,
-            //         top: 0
-            //     }
-            // },
             tooltips: {
                 mode : 'index',
                 enabled: true,
@@ -379,11 +446,19 @@ function draw4(ctx, type, type2, titleText, label, commits, insertions, deletion
             },
             scales: {
                 yAxes: [{
+                    ticks: {
+                        // display: true,
+                        // stacked: true,
+                        // stepSize: 20,
+                        // min: minimu,
+                        // max: maximu
+                    },
                     type: 'linear',
                     display: true,
                     position: 'left',
                     id: 'y-axis-1',
-                },{
+                },
+                    {
                     type: 'linear',
                     display: true,
                     position: 'right',
@@ -415,3 +490,19 @@ document.getElementById("homeCards").onmousemove = e => {
         card.style.setProperty("--mouse-y", `${y}px`)
     }
 }
+
+function addScrollButtons() {
+    const outer = document.querySelector(".outer");
+    const scrollUpButton = document.querySelector("#scroll-up");
+    const scrollDownButton = document.querySelector("#scroll-down");
+
+    scrollUpButton.addEventListener("click", () => {
+      outer.scrollTop -= 250; // scroll up by 50 pixels
+    });
+
+    scrollDownButton.addEventListener("click", () => {
+      outer.scrollTop += 250; // scroll down by 50 pixels
+    });
+}
+
+
