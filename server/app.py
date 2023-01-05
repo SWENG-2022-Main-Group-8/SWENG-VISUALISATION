@@ -101,6 +101,8 @@ async def results_page():
         #Get number of commits from past four weeks till today
         commitDict = {}
         contributionDict = {}
+        # test = {}
+
         #dateRequired = datetime.strptime(("25" + "/" + "10" + "/" + "2022"), '%d/%m/%Y')
         dateRequired1 = datetime.now().strftime('%d/%m/%Y')
         dateRequired = datetime.strptime(dateRequired1, '%d/%m/%Y')
@@ -111,42 +113,62 @@ async def results_page():
             commitDict[weekBefore.strftime('%d/%m/%Y')] = 0
 
         print(commitDict)
-        commitsInTotal = 0
         for i in user_repos:
             repo = i['name']
-            commitsByUser = 0
-            commitsInRepo = 0
+            commits_url = f'https://api.github.com/repos/{username}/{repo}/commits?author={username}'
             try:
-                commits_url = f'https://api.github.com/repos/{username}/{repo}/commits?per_page=100'
                 response = (requests.get(commits_url, auth=('access_token', current_session['access_token'])))
             except requests.exceptions.RequestException as e: continue
-            contributorData = json.loads(response.text)
-            for i in contributorData:
+            commits = response.json()
+            commitsByUser = len(commits)
+            if commitsByUser == 0 : continue
+            commitsInRepo = 0
+            commits_url = f'https://api.github.com/repos/{username}/{repo}/commits?per_page=100'
+            while commits_url:
                 try:
-                    name = i['author']['login']
-                except: continue # for error of i['author']['login'] not existing in certain cases and giving None
-                if(name != username) :
+                    response = (requests.get(commits_url, auth=('access_token', current_session['access_token'])))
+                except requests.exceptions.RequestException as e: continue
+                contributorData = json.loads(response.text)
+                for i in contributorData:
+                    try:
+                        name = i['author']['login']
+                    except: continue # for error of i['author']['login'] not existing in certain cases and giving None
+                    if(name != username) :
+                        commitsInRepo = commitsInRepo + 1
+                        continue
                     commitsInRepo = commitsInRepo + 1
-                    continue
-                commitsInRepo = commitsInRepo + 1
-                commitsByUser = commitsByUser + 1
-                commitsInTotal = commitsInTotal + 1
-                date = i['commit']['author']['date']
-                year = date[0:4]
-                month = date[5:7]
-                day = date[8:10]
-                currentDate = datetime.strptime((day + "/" + month + "/" + year), '%d/%m/%Y')
-                for k,v in commitDict.items():
-                    currentWeek = datetime.strptime(k, '%d/%m/%Y')
-                    weekAfter = currentWeek.date() + timedelta(days=7)
-                    if((currentDate.date() == dateRequired.date() and weekAfter == currentDate.date()) or currentWeek.date() <= currentDate.date() < weekAfter) :
-                        v = v + 1
-                        commitDict[k] = v
-            if(commitsInRepo == 0): continue
-            contribution = (commitsByUser/commitsInRepo) * 100
-            contributionDict[repo] = str(round(contribution,2)) + "%," + str(commitsInRepo)
+                    date = i['commit']['author']['date']
+                    year = date[0:4]
+                    month = date[5:7]
+                    day = date[8:10]
+                    currentDate = datetime.strptime((day + "/" + month + "/" + year), '%d/%m/%Y')
+                    for k,v in commitDict.items():
+                        currentWeek = datetime.strptime(k, '%d/%m/%Y')
+                        weekAfter = currentWeek.date() + timedelta(days=7)
+                        if((currentDate.date() == dateRequired.date() and weekAfter == currentDate.date()) or currentWeek.date() <= currentDate.date() < weekAfter) :
+                            v = v + 1
+                            commitDict[k] = v
+                if(commitsInRepo == 0): break
+                contribution = (commitsByUser/commitsInRepo) * 100
+                contributionDict[repo] = str(round(contribution,2)) + "%," + str(commitsInRepo)
+                print(repo + ": " + str(commitsByUser) + "," + str(commitsInRepo))
+                # test[repo] = str(commitsByUser) + "," + str(commitsInRepo)
+
+
+                # Get the URL for the next page of results from the Link header
+                link_header = response.headers.get("Link", None)
+                if link_header:
+                    next_url = None
+                    for link in link_header.split(", "):
+                        if "rel=\"next\"" in link:
+                            next_url = link[link.index("<") + 1:link.index(">")]
+                            break
+                    commits_url = next_url
+                else:
+                    commits_url = None
         # print(commitDict)
-        print(contributionDict)
+        # print(contributionDict)
+        print(test)
 
         #Getting number of commits, insertions, deletions from repos
         commitInsertionDeletionDict = {}
@@ -158,28 +180,28 @@ async def results_page():
             insertions = 0
             deletions = 0
             
-            while True:
-                insertions_url = "https://api.github.com/repos/{}/{}/stats/contributors".format(username, repo)
-                try:
-                    response = (requests.get(insertions_url, auth=('access_token', current_session['access_token'])))
-                    break
-                except: print("error")
-
+            # while True:
+            #     insertions_url = "https://api.github.com/repos/{}/{}/stats/contributors".format(username, repo)
+            #     try:
+            #         response = (requests.get(insertions_url, auth=('access_token', current_session['access_token'])))
+            #         break
+            #     except: print("error")
+            insertions_url = "https://api.github.com/repos/{}/{}/stats/contributors".format(username, repo)
+            response = (requests.get(insertions_url, auth=('access_token', current_session['access_token'])))
             stats = json.loads(response.text)
+            print(repo + ":")
             for stat in stats:
                 try:
                     name = stat['author']['login']
-                except: continue # for error of i['author']['login'] not existing in certain cases and giving None
-
+                except:
+                    print("error")
+                    continue # for error of i['author']['login'] not existing in certain cases and giving None
                 if name == username:
                     commits = stat['total'];
+                    print(commits)
                     for ad in stat['weeks']:
                         insertions = insertions + ad['a']
                         deletions = deletions + ad['d']
-                    #print(commits)
-                    #print(insertions)
-                    #print(deletions)
-            #print(str(insertions) + " " + str(deletions) + " " + str(commits))
             if commits == 0 : continue
             deletions = deletions * -1
             if(insertions > maxInsertions):
