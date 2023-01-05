@@ -161,7 +161,17 @@ async def results_page():
                     commits_url = next_url
                 else:
                     commits_url = None
-        # print(commitDict)
+        print(commitDict)
+        commitDict2 = {}
+        count = 0
+        for k,v in commitDict.items():
+            currentWeek = datetime.strptime(k, '%d/%m/%Y')
+            if count == 0: weekAfter = currentWeek.date() + timedelta(days=7)
+            else : weekAfter = currentWeek.date() + timedelta(days=6)
+            key = k + " - " + weekAfter.strftime('%d/%m/%Y')
+            commitDict2[key] = v
+            count+=1
+        commitDict = commitDict2
 
 
         #Getting number of commits, insertions, deletions from repos
