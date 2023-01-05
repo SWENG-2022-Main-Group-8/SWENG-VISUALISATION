@@ -5,7 +5,10 @@ import requests
 import flask
 import httpx
 import asyncio
+from library import username as usernameAPI
 from library import individualMap as mapAPI
+from library import languageData as languagesAPI
+from library import commitData as commitAPI
 from library import org_maps as orgMapAPI
 from flask_cors import CORS
 from datetime import datetime, date, timedelta
