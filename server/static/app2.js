@@ -169,29 +169,20 @@ function commitsGraph(commitsData) {
     let label = [];
     let commits = [];
     let backgroundColor = [];
-
-
     const orderedDates = {};
     Object.keys(commitsData).sort(function(a, b) {
         return a.split('/').reverse().join('').localeCompare(b.split('/').reverse().join(''));
     }).forEach(function(key) {
         orderedDates[key] = commitsData[key];
     })
-
     console.log(orderedDates);
-
-    // for (let date in commitsData) {
-    //     const info = commitsData[dat].split(',',2);
-    //     let bytesOfLanguages = info[0];
-    //     let numberOfLanguages = info[1];
-
     for (let date in orderedDates) {
         label.push(date);
         commits.push(commitsData[date]);
         console.log(date +" " + commitsData[date])
         backgroundColor.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
     }
-    draw3('commitBar', 'horizontalBar', 'commits', `Graph of commits in the past month`, label, commits, backgroundColor);
+    draw3('commitBar', 'horizontalBar', 'commits', `Commits in the past month`, label, commits, backgroundColor);
 }
 
 function fillCommitChart(commitData) {

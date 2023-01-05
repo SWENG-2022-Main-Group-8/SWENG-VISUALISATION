@@ -5,10 +5,7 @@ import requests
 import flask
 import httpx
 import asyncio
-from library import username as usernameAPI
 from library import individualMap as mapAPI
-from library import languageData as languagesAPI
-from library import commitData as commitAPI
 from library import org_maps as orgMapAPI
 from flask_cors import CORS
 from datetime import datetime, date, timedelta
@@ -101,8 +98,6 @@ async def results_page():
         #Get number of commits from past four weeks till today
         commitDict = {}
         contributionDict = {}
-
-        #dateRequired = datetime.strptime(("25" + "/" + "10" + "/" + "2022"), '%d/%m/%Y')
         dateRequired1 = datetime.now().strftime('%d/%m/%Y')
         dateRequired = datetime.strptime(dateRequired1, '%d/%m/%Y')
         weekBefore = dateRequired.date() - timedelta(days=7)
