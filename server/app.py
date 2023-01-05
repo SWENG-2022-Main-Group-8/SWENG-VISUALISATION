@@ -101,7 +101,6 @@ async def results_page():
         #Get number of commits from past four weeks till today
         commitDict = {}
         contributionDict = {}
-        # test = {}
 
         #dateRequired = datetime.strptime(("25" + "/" + "10" + "/" + "2022"), '%d/%m/%Y')
         dateRequired1 = datetime.now().strftime('%d/%m/%Y')
@@ -111,7 +110,6 @@ async def results_page():
         for i in range(3):
             weekBefore = weekBefore - timedelta(days=7)
             commitDict[weekBefore.strftime('%d/%m/%Y')] = 0
-
         print(commitDict)
         for i in user_repos:
             repo = i['name']
@@ -151,9 +149,6 @@ async def results_page():
                 if(commitsInRepo == 0): break
                 contribution = (commitsByUser/commitsInRepo) * 100
                 contributionDict[repo] = str(round(contribution,2)) + "%," + str(commitsInRepo)
-                # print(repo + ": " + str(commitsByUser) + "," + str(commitsInRepo))
-                # test[repo] = str(commitsByUser) + "," + str(commitsInRepo)
-
 
                 # Get the URL for the next page of results from the Link header
                 link_header = response.headers.get("Link", None)
@@ -167,8 +162,7 @@ async def results_page():
                 else:
                     commits_url = None
         # print(commitDict)
-        # print(contributionDict)
-        # print(test)
+
 
         #Getting number of commits, insertions, deletions from repos
         commitInsertionDeletionDict = {}
