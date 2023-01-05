@@ -151,7 +151,7 @@ async def results_page():
                 if(commitsInRepo == 0): break
                 contribution = (commitsByUser/commitsInRepo) * 100
                 contributionDict[repo] = str(round(contribution,2)) + "%," + str(commitsInRepo)
-                print(repo + ": " + str(commitsByUser) + "," + str(commitsInRepo))
+                # print(repo + ": " + str(commitsByUser) + "," + str(commitsInRepo))
                 # test[repo] = str(commitsByUser) + "," + str(commitsInRepo)
 
 
@@ -168,7 +168,7 @@ async def results_page():
                     commits_url = None
         # print(commitDict)
         # print(contributionDict)
-        print(test)
+        # print(test)
 
         #Getting number of commits, insertions, deletions from repos
         commitInsertionDeletionDict = {}
@@ -179,36 +179,36 @@ async def results_page():
             commits = 0
             insertions = 0
             deletions = 0
-            
-            # while True:
-            #     insertions_url = "https://api.github.com/repos/{}/{}/stats/contributors".format(username, repo)
-            #     try:
-            #         response = (requests.get(insertions_url, auth=('access_token', current_session['access_token'])))
-            #         break
-            #     except: print("error")
             insertions_url = "https://api.github.com/repos/{}/{}/stats/contributors".format(username, repo)
-            response = (requests.get(insertions_url, auth=('access_token', current_session['access_token'])))
-            stats = json.loads(response.text)
-            print(repo + ":")
-            for stat in stats:
-                try:
-                    name = stat['author']['login']
-                except:
-                    print("error")
-                    continue # for error of i['author']['login'] not existing in certain cases and giving None
-                if name == username:
-                    commits = stat['total'];
-                    print(commits)
-                    for ad in stat['weeks']:
-                        insertions = insertions + ad['a']
-                        deletions = deletions + ad['d']
-            if commits == 0 : continue
-            deletions = deletions * -1
-            if(insertions > maxInsertions):
-                maxInsertions = insertions
-            if(deletions < maxDeletions):
-                maxDeletions = deletions
-            commitInsertionDeletionDict[repo] = str(commits) + "," + str(insertions) + "," + str(deletions)
+            loop = True
+            while loop:
+                response = (requests.get(insertions_url, auth=('access_token', current_session['access_token'])))
+                stats = json.loads(response.text)
+                loopCheck = False
+                print(repo  + ":")
+                for stat in stats:
+                    try:
+                        name = stat['author']['login']
+                    except:
+                        loopCheck = True
+                        break # for error of i['author']['login'] not existing in certain cases and giving None
+                    if name == username:
+                        loopCheck = True
+                        commits = stat['total'];
+                        print(commits)
+                        for ad in stat['weeks']:
+                            insertions = insertions + ad['a']
+                            deletions = deletions + ad['d']
+                    else : loopCheck = True
+                if loopCheck == False: continue
+                if commits == 0 : break
+                deletions = deletions * -1
+                if(insertions > maxInsertions):
+                    maxInsertions = insertions
+                if(deletions < maxDeletions):
+                    maxDeletions = deletions
+                commitInsertionDeletionDict[repo] = str(commits) + "," + str(insertions) + "," + str(deletions)
+                loop = False
 
         #Get user events
         if 'username' not in request.args:
