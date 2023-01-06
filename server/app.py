@@ -185,8 +185,8 @@ async def results_page():
             insertions = 0
             deletions = 0
             insertions_url = "https://api.github.com/repos/{}/{}/stats/contributors".format(username, repo)
-            loopCheck = True
-            while loopCheck:
+            loop = True
+            while loop:
                 response = (requests.get(insertions_url, auth=('access_token', current_session['access_token'])))
                 stats = json.loads(response.text)
                 loopCheck = False
@@ -196,6 +196,7 @@ async def results_page():
                         name = stat['author']['login']
                     except:
                         loopCheck = True
+                        print("ERROR")
                         break # for error of i['author']['login'] not existing in certain cases and giving None
                     if name == username:
                         loopCheck = True
@@ -205,7 +206,9 @@ async def results_page():
                             insertions = insertions + ad['a']
                             deletions = deletions + ad['d']
                     else : loopCheck = True
-                if loopCheck == False: continue
+                if loopCheck == False:
+                    print("TRY AGAIN")
+                    continue
                 if commits == 0 : break
                 deletions = deletions * -1
                 if(insertions > maxInsertions):
@@ -213,7 +216,8 @@ async def results_page():
                 if(deletions < maxDeletions):
                     maxDeletions = deletions
                 commitInsertionDeletionDict[repo] = str(commits) + "," + str(insertions) + "," + str(deletions)
-                loopCheck = False
+                print("SUCCESS")
+                break
 
         #Get user events
         if 'username' not in request.args:
