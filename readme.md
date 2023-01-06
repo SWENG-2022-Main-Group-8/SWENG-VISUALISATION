@@ -1,5 +1,7 @@
 Latest version of main branch will be deployed to https://sweng-visualisation.herokuapp.com/
 
+Able to search for GitHub users who have been authorised e.g. KennethHarmon and kvnkarthik02
+
 Install virtualenv by:
 ```pip install virtualenv```
 
@@ -27,4 +29,5 @@ For some this tells you flask module not found, instead try one of the two:
 
 To run the server
 ```python3 server/app.py```
+
 
