@@ -108,17 +108,18 @@ async def results_page():
         for i in range(3):
             weekBefore = weekBefore - timedelta(days=7)
             commitDict[weekBefore.strftime('%d/%m/%Y')] = 0
-        print(commitDict)
         for i in user_repos:
             repo = i['name']
-            commits_url = f'https://api.github.com/repos/{username}/{repo}/commits?author={username}'
-            try:
-                response = (requests.get(commits_url, auth=('access_token', current_session['access_token'])))
-            except requests.exceptions.RequestException as e: continue
-            commits = response.json()
-            commitsByUser = len(commits)
-            if commitsByUser == 0 : continue
+            # commits_url = f'https://api.github.com/repos/{username}/{repo}/commits?author={username}'
+            # try:
+            #     response = (requests.get(commits_url, auth=('access_token', current_session['access_token'])))
+            # except requests.exceptions.RequestException as e: continue
+            # commits = response.json()
+            # commitsByUser = len(commits)
+            # print(repo + " : " + str(commitsByUser))
+            # if commitsByUser == 0 : continue
             commitsInRepo = 0
+            commitsByUser = 0
             commits_url = f'https://api.github.com/repos/{username}/{repo}/commits?per_page=100'
             while commits_url:
                 try:
@@ -132,7 +133,8 @@ async def results_page():
                     if(name != username) :
                         commitsInRepo = commitsInRepo + 1
                         continue
-                    commitsInRepo = commitsInRepo + 1
+                    commitsInRepo += 1
+                    commitsByUser += 1
                     date = i['commit']['author']['date']
                     year = date[0:4]
                     month = date[5:7]
@@ -145,6 +147,7 @@ async def results_page():
                             v = v + 1
                             commitDict[k] = v
                 if(commitsInRepo == 0): break
+                if(commitsByUser == 0) : break
                 contribution = (commitsByUser/commitsInRepo) * 100
                 contributionDict[repo] = str(round(contribution,2)) + "%," + str(commitsInRepo)
 
@@ -159,7 +162,7 @@ async def results_page():
                     commits_url = next_url
                 else:
                     commits_url = None
-        print(commitDict)
+        # print(contributionDict)
         commitDict2 = {}
         count = 0
         for k,v in commitDict.items():
@@ -182,8 +185,8 @@ async def results_page():
             insertions = 0
             deletions = 0
             insertions_url = "https://api.github.com/repos/{}/{}/stats/contributors".format(username, repo)
-            loop = True
-            while loop:
+            loopCheck = True
+            while loopCheck:
                 response = (requests.get(insertions_url, auth=('access_token', current_session['access_token'])))
                 stats = json.loads(response.text)
                 loopCheck = False
@@ -210,7 +213,7 @@ async def results_page():
                 if(deletions < maxDeletions):
                     maxDeletions = deletions
                 commitInsertionDeletionDict[repo] = str(commits) + "," + str(insertions) + "," + str(deletions)
-                loop = False
+                loopCheck = False
 
         #Get user events
         if 'username' not in request.args:
