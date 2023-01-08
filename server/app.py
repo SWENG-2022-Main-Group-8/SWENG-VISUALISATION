@@ -39,20 +39,27 @@ async def get_user_commit_data_for_all_repos(username, repo_names):
 
 @app.route('/')
 def login_page():
+    print("Login Working")
     return render_template('login.html')
 
 @app.route('/menu')
 def index():
+    print("Index Working")
     return render_template("index.html")
 
 @app.route('/results', methods=["GET"])
 async def results_page():
+    print("Results Page")
     if request.method == 'GET':
+        print("Reached the request get method stage")
+        print("repo url search")
         repos_url = 'https://api.github.com/user/repos'
+        print("Reached the request get method stage")
         access_token_url = 'https://api.github.com/user'
         events_url = ''
-
+        
         #User is searching for another user
+        print("User is searching for another user")
         if 'username' in request.args:
             username = request.args['username']
             access_token_url = f'https://api.github.com/users/{username}'
@@ -176,6 +183,7 @@ async def results_page():
 
 
         #Getting number of commits, insertions, deletions from repos
+        #Getting number of commits, insertions, deletions from repos
         commitInsertionDeletionDict = {}
         maxInsertions = 0
         maxDeletions = 0
@@ -188,7 +196,10 @@ async def results_page():
             loop = True
             while loop:
                 response = (requests.get(insertions_url, auth=('access_token', current_session['access_token'])))
-                stats = json.loads(response.text)
+                try:
+                    stats = json.loads(response.text)
+                except:
+                    break
                 loopCheck = False
                 print(repo  + ":")
                 for stat in stats:
@@ -218,7 +229,6 @@ async def results_page():
                 commitInsertionDeletionDict[repo] = str(commits) + "," + str(insertions) + "," + str(deletions)
                 print("SUCCESS")
                 break
-
         #Get user events
         if 'username' not in request.args:
             events_url = f'https://api.github.com/users/{username}/events'
