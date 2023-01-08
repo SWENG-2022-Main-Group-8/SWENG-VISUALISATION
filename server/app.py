@@ -188,7 +188,10 @@ async def results_page():
             loop = True
             while loop:
                 response = (requests.get(insertions_url, auth=('access_token', current_session['access_token'])))
-                stats = json.loads(response.text)
+                try:
+                    stats = json.loads(response.text)
+                except:
+                    break
                 loopCheck = False
                 print(repo  + ":")
                 for stat in stats:
